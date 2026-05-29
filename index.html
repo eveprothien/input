@@ -76,6 +76,34 @@
       box-shadow: 0 8px 22px rgba(20, 40, 30, 0.06);
     }
 
+    .header-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 12px;
+    }
+
+    .admin-nav-btn {
+      border: 1px solid var(--grey-200);
+      background: var(--white);
+      color: var(--green-dark);
+      border-radius: 14px;
+      padding: 10px 18px;
+      font-family: 'Kanit', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 22px rgba(20, 40, 30, 0.06);
+      transition: all 0.2s ease;
+    }
+
+    .admin-nav-btn:hover,
+    .admin-nav-btn.active {
+      background: var(--green);
+      color: var(--white);
+      border-color: var(--green);
+    }
+
     .tab-btn {
       border: 0;
       background: transparent;
@@ -738,6 +766,265 @@
     .dot.yellow { background: var(--yellow); }
     .dot.grey { background: #dfe5e2; }
 
+
+
+    .admin-page {
+      min-height: 760px;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      background: var(--white);
+      border: 1px solid var(--grey-200);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 18px 50px rgba(20, 40, 30, 0.08);
+    }
+
+    .admin-visual {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(126,255,214,0.32) 0, transparent 28%),
+        radial-gradient(circle at 84% 22%, rgba(145,223,110,0.34) 0, transparent 26%),
+        radial-gradient(circle at 70% 82%, rgba(130,236,255,0.28) 0, transparent 30%),
+        linear-gradient(135deg, #1b5364 0%, #286f82 48%, #3590a2 100%);
+    }
+
+    .admin-visual::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.065) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.065) 1px, transparent 1px);
+      background-size: 42px 42px;
+      opacity: 0.38;
+    }
+
+    .admin-visual::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(115deg, rgba(67,176,42,0.12), transparent 34%),
+        radial-gradient(circle at center, rgba(255,255,255,0.10), transparent 52%);
+      opacity: 0.8;
+    }
+
+    .admin-visual-inner {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px;
+      text-align: center;
+    }
+
+    .admin-brand {
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .admin-bde-logo,
+    .admin-brand img {
+      max-width: 260px;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      background: rgba(255,255,255,0.88);
+      border-radius: 22px;
+      padding: 22px 28px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.18);
+    }
+
+    .admin-brand-title {
+      margin: 0;
+      color: #ffffff;
+      font-size: 34px;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+
+    .admin-brand-subtitle {
+      margin: 0;
+      color: rgba(255,255,255,0.82);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .admin-login-side {
+      background: #f8faf9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .admin-login-card {
+      width: 100%;
+      max-width: 470px;
+      background: #ffffff;
+      border: 1px solid var(--grey-200);
+      border-radius: 24px;
+      padding: 34px 30px 28px;
+      box-shadow: 0 16px 38px rgba(20, 40, 30, 0.08);
+    }
+
+    .admin-login-top {
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .admin-login-heading {
+      margin: 0;
+      color: #111;
+      font-size: 28px;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+
+    .admin-login-subheading {
+      margin: 4px 0 0;
+      color: var(--grey-500);
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .admin-home-btn {
+      border: 0;
+      background: #eef2ff;
+      color: #2b63d9;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-family: 'Kanit', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .admin-login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .admin-login-form label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 15px;
+      font-weight: 800;
+      color: #111;
+    }
+
+    .admin-login-form input {
+      width: 100%;
+      height: 52px;
+      border: 1px solid var(--grey-300);
+      border-radius: 14px;
+      padding: 0 16px;
+      font-family: 'Kanit', sans-serif;
+      font-size: 16px;
+      background: #fff;
+    }
+
+    .admin-login-submit {
+      margin-top: 8px;
+      width: 100%;
+      height: 54px;
+      border: 0;
+      border-radius: 14px;
+      background: var(--green);
+      color: #ffffff;
+      font-family: 'Kanit', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .admin-login-submit:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(67,176,42,0.26);
+    }
+
+    .admin-login-note {
+      margin-top: 16px;
+      text-align: center;
+      color: var(--grey-500);
+      font-size: 13px;
+    }
+
+    @media (max-width: 1100px) {
+      .admin-page {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-visual {
+        min-height: 280px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .admin-login-side {
+        padding: 18px;
+      }
+
+      .admin-login-card {
+        padding: 24px 18px 20px;
+        border-radius: 18px;
+      }
+
+      .admin-login-top {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .admin-home-btn {
+        width: 100%;
+      }
+
+      .admin-brand img {
+        max-width: 160px;
+      }
+
+      .admin-brand-title {
+        font-size: 26px;
+      }
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #ffffff;
+      font-size: 13px;
+    }
+
+    .admin-table th,
+    .admin-table td {
+      border: 1px solid var(--grey-200);
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .admin-table th {
+      background: var(--green-soft);
+      color: #111;
+      font-weight: 800;
+    }
+
+    .admin-table tr:nth-child(even) {
+      background: #fafbfb;
+    }
+
     @media (max-width: 900px) {
       .overall-summary,
       .overall-target-grid {
@@ -793,10 +1080,13 @@
         <h1>สถานะความสำเร็จราย <span>ยุทธศาสตร์</span></h1>
 
       </div>
-      <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('input')">Input Form</button>
-        <button class="tab-btn" onclick="switchTab('result')">Result Dashboard</button>
-        <button class="tab-btn" onclick="switchTab('history')">History</button>
+      <div class="header-actions">
+        <button id="adminNavBtn" class="admin-nav-btn" onclick="switchTab('admin')">Admin</button>
+        <div class="tabs">
+          <button class="tab-btn active" onclick="switchTab('input')">Input Form</button>
+          <button class="tab-btn" onclick="switchTab('result')">Result Dashboard</button>
+          <button class="tab-btn" onclick="switchTab('history')">History</button>
+        </div>
       </div>
     </section>
 
@@ -833,7 +1123,7 @@
       <div id="strategyForms" class="form-grid"></div>
 
       <div class="submit-bottom">
-        <button class="btn btn-primary" onclick="generateDashboard()">Submit / Generate Dashboard</button>
+        <button class="btn btn-primary" onclick="generateDashboard(); submitToGoogleSheets();">Submit / Generate Dashboard</button>
       </div>
     </section>
 
@@ -863,9 +1153,86 @@
       </div>
       <div id="historyList" class="history-list"></div>
     </section>
+  
+    <section id="admin" class="panel">
+      <div class="admin-page">
+        <div class="admin-visual">
+          <div class="admin-visual-inner">
+            <div class="admin-brand">
+              <img src="./bde-logo.png?v=2" alt="BDE Logo" class="admin-bde-logo">
+
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-login-side">
+          <div id="adminLoginBox" class="admin-login-card">
+            <div class="admin-login-top">
+              <div>
+                
+              </div>
+              <button class="admin-home-btn" onclick="switchTab('input')">กลับไปหน้าหลัก</button>
+            </div>
+
+            <div class="admin-login-form">
+              <div class="input-group">
+                <label for="adminUsername">Username</label>
+                <input type="text" id="adminUsername" placeholder="ระบุ username">
+              </div>
+
+              <div class="input-group">
+                <label for="adminPassword">Password</label>
+                <input type="password" id="adminPassword" placeholder="ระบุ password">
+              </div>
+
+              <button class="admin-login-submit" onclick="adminLogin()">เข้าสู่ระบบ</button>
+            </div>
+
+            <div class="admin-login-note">
+              ใช้สำหรับผู้ดูแลระบบเท่านั้น
+            </div>
+          </div>
+
+          <div id="adminDashboardBox" style="display:none; width:100%;">
+            <div class="toolbar">
+              <h3 class="section-heading" style="margin:0;">ข้อมูลที่กรอกเข้ามาทั้งหมด</h3>
+              <div>
+                <button class="btn btn-secondary" onclick="loadAllSubmissions()">Refresh Data</button>
+                <button class="btn btn-danger" onclick="adminLogout()">Logout</button>
+              </div>
+            </div>
+
+            <div id="adminSummary" class="overall-summary"></div>
+
+            <div class="plan-info-card">
+              <h3 class="section-heading">รายการ Submission ทั้งหมด</h3>
+              <div id="adminSubmissionList" class="history-list"></div>
+            </div>
+
+            <div class="plan-info-card">
+              <h3 class="section-heading">รายละเอียดตัวชี้วัดทั้งหมด</h3>
+              <div style="overflow-x:auto;">
+                <table id="adminIndicatorTable" class="admin-table"></table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <script>
+    // วาง Web App URL ที่ได้จาก Google Apps Script ตรงนี้
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyODfluTtTDSTLnBUAFEutsoARzNZD68SAFLeKvV_9c7VMsKHTlBIJirf7yFnAeH3cR/exec';
+
+    // รหัสสำหรับทดลองใช้หน้า Admin เท่านั้น
+    const ADMIN_USERNAME = 'admin';
+    const ADMIN_PASSWORD = '1234';
+
+    let adminLoggedIn = false;
+    let allRemoteData = null;
+
     let planInfo = {
       planName: "",
       agencyName: ""
@@ -890,13 +1257,22 @@
       document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
 
+      const adminNavBtn = document.getElementById('adminNavBtn');
+      if (adminNavBtn) adminNavBtn.classList.remove('active');
+
       document.getElementById(tabName).classList.add('active');
+
       const buttons = document.querySelectorAll('.tab-btn');
       if (tabName === 'input') buttons[0].classList.add('active');
       if (tabName === 'result') buttons[1].classList.add('active');
+
       if (tabName === 'history') {
         buttons[2].classList.add('active');
         renderHistory();
+      }
+
+      if (tabName === 'admin' && adminNavBtn) {
+        adminNavBtn.classList.add('active');
       }
     }
 
@@ -1350,6 +1726,279 @@
         const hasIndicatorData = (strategy.indicators || []).some(item => item.name || item.value || item.target);
         return hasStrategyText || hasIndicatorData;
       });
+    }
+
+
+    async function submitToGoogleSheets() {
+      updatePlanInfo();
+
+      if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === 'PASTE_YOUR_WEB_APP_URL_HERE') {
+        alert('ยังไม่ได้ใส่ Google Apps Script Web App URL ในไฟล์ HTML');
+        return;
+      }
+
+      const payload = {
+        planInfo,
+        overallTargets,
+        strategies
+      };
+
+      try {
+        await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'text/plain'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        alert('บันทึกข้อมูลเข้าสู่ฐานข้อมูลกลางเรียบร้อยแล้ว');
+
+      } catch (error) {
+        console.error(error);
+        alert('ไม่สามารถบันทึกข้อมูลได้ กรุณาลองใหม่');
+      }
+    }
+
+    function adminLogin() {
+      const username = document.getElementById('adminUsername').value;
+      const password = document.getElementById('adminPassword').value;
+
+      if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+        adminLoggedIn = true;
+
+        document.getElementById('adminLoginBox').style.display = 'none';
+        document.getElementById('adminDashboardBox').style.display = 'block';
+
+        loadAllSubmissions();
+
+      } else {
+        alert('Username หรือ Password ไม่ถูกต้อง');
+      }
+    }
+
+    function adminLogout() {
+      adminLoggedIn = false;
+      allRemoteData = null;
+
+      document.getElementById('adminUsername').value = '';
+      document.getElementById('adminPassword').value = '';
+
+      document.getElementById('adminLoginBox').style.display = 'block';
+      document.getElementById('adminDashboardBox').style.display = 'none';
+
+      document.getElementById('adminSummary').innerHTML = '';
+      document.getElementById('adminSubmissionList').innerHTML = '';
+      document.getElementById('adminIndicatorTable').innerHTML = '';
+    }
+
+    function loadAllSubmissions() {
+      if (!adminLoggedIn) {
+        alert('กรุณา Login ก่อน');
+        return;
+      }
+
+      if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === 'PASTE_YOUR_WEB_APP_URL_HERE') {
+        alert('ยังไม่ได้ใส่ Google Apps Script Web App URL ในไฟล์ HTML');
+        return;
+      }
+
+      loadJsonp(GOOGLE_SCRIPT_URL, function(data) {
+        allRemoteData = data;
+
+        renderAdminSummary(data);
+        renderAdminSubmissionList(data);
+        renderAdminIndicatorTable(data);
+      });
+    }
+
+    function loadJsonp(url, callback) {
+      const callbackName = 'jsonpCallback_' + Date.now();
+
+      const script = document.createElement('script');
+
+      window[callbackName] = function(data) {
+        callback(data);
+        delete window[callbackName];
+        document.body.removeChild(script);
+      };
+
+      script.src = url + '?callback=' + callbackName;
+      script.onerror = function() {
+        alert('ไม่สามารถดึงข้อมูลจากฐานข้อมูลกลางได้');
+        delete window[callbackName];
+        document.body.removeChild(script);
+      };
+
+      document.body.appendChild(script);
+    }
+
+    function renderAdminSummary(data) {
+      const indicators = data.indicators || [];
+
+      const total = indicators.length;
+      const completed = indicators.filter(item => item.status === 'completed').length;
+      const notCompleted = total - completed;
+
+      const completedPercent = total === 0 ? 0 : Math.round((completed / total) * 100);
+      const notCompletedPercent = total === 0 ? 0 : Math.round((notCompleted / total) * 100);
+
+      document.getElementById('adminSummary').innerHTML = `
+        <div class="summary-kpi completed">
+          <div class="kpi-donut" style="--p:${completedPercent}">
+            <span>${completedPercent}%</span>
+          </div>
+          <div class="kpi-content">
+            <p class="kpi-label">ตัวชี้วัดบรรลุผลสำเร็จ</p>
+            <div class="kpi-main">
+              <span class="kpi-number">${completed}</span>
+              <span class="kpi-unit">ตัวชี้วัด</span>
+            </div>
+            <span class="kpi-percent">จากทั้งหมด ${total} ตัวชี้วัด</span>
+          </div>
+        </div>
+
+        <div class="summary-kpi pending">
+          <div class="kpi-donut" style="--p:${notCompletedPercent}">
+            <span>${notCompletedPercent}%</span>
+          </div>
+          <div class="kpi-content">
+            <p class="kpi-label">ตัวชี้วัดยังไม่บรรลุผลสำเร็จ</p>
+            <div class="kpi-main">
+              <span class="kpi-number">${notCompleted}</span>
+              <span class="kpi-unit">ตัวชี้วัด</span>
+            </div>
+            <span class="kpi-percent">จากทั้งหมด ${total} ตัวชี้วัด</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderAdminSubmissionList(data) {
+      const submissions = data.submissions || [];
+      const list = document.getElementById('adminSubmissionList');
+
+      if (!submissions.length) {
+        list.innerHTML = '';
+        return;
+      }
+
+      list.innerHTML = submissions.map(item => `
+        <div class="history-card">
+          <div>
+            <p class="history-title">${escapeHtml(item.submission_id || '-')} • ${escapeHtml(item.submitted_at || '-')}</p>
+            <p class="history-plan">${escapeHtml(item.plan_name || '-')} • ${escapeHtml(item.agency_name || '-')}</p>
+          </div>
+          <div class="history-actions">
+            <button class="btn btn-secondary" onclick="viewRemoteSubmission('${escapeAttr(item.submission_id || '')}')">ดู Dashboard</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderAdminIndicatorTable(data) {
+      const indicators = data.indicators || [];
+      const strategiesData = data.strategies || [];
+      const submissions = data.submissions || [];
+
+      const table = document.getElementById('adminIndicatorTable');
+
+      if (!indicators.length) {
+        table.innerHTML = '';
+        return;
+      }
+
+      table.innerHTML = `
+        <thead>
+          <tr>
+            <th>Submission ID</th>
+            <th>ชื่อแผน</th>
+            <th>หน่วยงาน</th>
+            <th>ยุทธศาสตร์</th>
+            <th>ตัวชี้วัด</th>
+            <th>ค่าเป้าหมาย</th>
+            <th>ค่าปัจจุบัน</th>
+            <th>สถานะ</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${indicators.map(ind => {
+            const strategy = strategiesData.find(st => st.strategy_id === ind.strategy_id) || {};
+            const submission = submissions.find(sub => sub.submission_id === ind.submission_id) || {};
+
+            return `
+              <tr>
+                <td>${escapeHtml(ind.submission_id || '-')}</td>
+                <td>${escapeHtml(submission.plan_name || '-')}</td>
+                <td>${escapeHtml(submission.agency_name || '-')}</td>
+                <td>${escapeHtml(strategy.strategy_name || '-')}</td>
+                <td>${escapeHtml(ind.indicator_name || '-')}</td>
+                <td>${escapeHtml(ind.target_value || '-')}</td>
+                <td>${escapeHtml(ind.current_value || '-')}</td>
+                <td>${escapeHtml(getStatusText(ind.status))}</td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      `;
+    }
+
+    function viewRemoteSubmission(submissionId) {
+      if (!allRemoteData) return;
+
+      const submission = allRemoteData.submissions.find(item => item.submission_id === submissionId);
+      if (!submission) return;
+
+      const relatedOverallTargets = (allRemoteData.overallTargets || [])
+        .filter(item => item.submission_id === submissionId)
+        .map(item => ({
+          name: item.target_name,
+          target: item.target_value,
+          value: item.current_value,
+          status: item.status
+        }));
+
+      const relatedStrategies = (allRemoteData.strategies || [])
+        .filter(item => item.submission_id === submissionId)
+        .map((strategy, strategyIndex) => {
+          const relatedIndicators = (allRemoteData.indicators || [])
+            .filter(ind => ind.strategy_id === strategy.strategy_id)
+            .map(ind => ({
+              name: ind.indicator_name,
+              target: ind.target_value,
+              value: ind.current_value,
+              status: ind.status
+            }));
+
+          return {
+            no: strategyIndex + 1,
+            theme: strategy.strategy_name,
+            description: strategy.strategy_description,
+            indicators: relatedIndicators
+          };
+        });
+
+      planInfo = {
+        planName: submission.plan_name || '',
+        agencyName: submission.agency_name || ''
+      };
+
+      overallTargets = relatedOverallTargets;
+      strategies = relatedStrategies;
+
+      renderForms();
+      generateDashboard(false);
+      switchTab('result');
+    }
+
+    function escapeAttr(text) {
+      return String(text || '')
+        .replace(/\\/g, '\\\\')
+        .replace(/'/g, "\\'")
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
     }
 
     function renderOverallTargetDashboard() {
