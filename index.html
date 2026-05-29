@@ -370,9 +370,16 @@
       background: #edf1ef;
     }
 
+    .result-section-title {
+      margin: 2px 0 12px;
+      font-size: 20px;
+      font-weight: 900;
+      color: #0f1712;
+    }
+
     .overall-summary {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 16px;
       margin: 8px 0 22px;
     }
@@ -404,32 +411,43 @@
     .summary-kpi.progress::before { background: var(--yellow); }
     .summary-kpi.pending::before { background: #b9c4be; }
 
-    .kpi-icon {
-      width: 54px;
-      height: 54px;
+    .kpi-donut {
+      --p: 0;
+      --c: var(--green);
+      width: 62px;
+      height: 62px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 25px;
-      font-weight: 900;
       flex-shrink: 0;
+      background: conic-gradient(var(--c) calc(var(--p) * 1%), #edf1ef 0);
+      position: relative;
+      box-shadow: 0 8px 18px rgba(20, 50, 30, 0.08);
     }
 
-    .summary-kpi.completed .kpi-icon {
-      color: #ffffff;
-      background: var(--green);
+    .kpi-donut::before {
+      content: "";
+      position: absolute;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: inset 0 0 0 1px #e8efeb;
     }
 
-    .summary-kpi.progress .kpi-icon {
-      color: #4a3a00;
-      background: var(--yellow);
+    .kpi-donut span {
+      position: relative;
+      z-index: 1;
+      font-size: 13px;
+      font-weight: 900;
+      color: #111;
+      line-height: 1;
     }
 
-    .summary-kpi.pending .kpi-icon {
-      color: #ffffff;
-      background: #b9c4be;
-    }
+    .summary-kpi.completed .kpi-donut { --c: var(--green); }
+    .summary-kpi.progress .kpi-donut { --c: var(--yellow); }
+    .summary-kpi.pending .kpi-donut { --c: #b9c4be; }
 
     .kpi-content {
       position: relative;
@@ -689,7 +707,8 @@
       font-weight: 600;
     }
 
-    .history-actions {
+    .history-actions,
+    .history-top-actions {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
@@ -755,7 +774,8 @@
         grid-template-columns: 1fr;
       }
 
-      .history-actions {
+      .history-actions,
+      .history-top-actions {
         justify-content: flex-start;
       }
 
@@ -770,7 +790,7 @@
     <section class="header">
       <div class="title">
         <h1>สถานะความสำเร็จราย <span>ยุทธศาสตร์</span></h1>
-        
+
       </div>
       <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('input')">Input Form</button>
@@ -824,6 +844,7 @@
 
       <div id="overallTargetDashboard" class="overall-target-dashboard"></div>
 
+      <h3 id="strategyKpiTitle" class="result-section-title">สถานะความสำเร็จตัวชี้วัดรายยุทธศาสตร์</h3>
       <div id="overallSummary" class="overall-summary"></div>
 
       <div class="dashboard-wrap">
@@ -834,7 +855,10 @@
     <section id="history" class="panel">
       <div class="toolbar">
         <div></div>
-        <button class="btn btn-danger" onclick="clearHistory()">ลบประวัติทั้งหมด</button>
+        <div class="history-top-actions">
+          <button class="btn btn-secondary" onclick="exportAllHistoryToExcel()">Export Excel ทั้งหมด</button>
+          <button class="btn btn-danger" onclick="clearHistory()">ลบประวัติทั้งหมด</button>
+        </div>
       </div>
       <div id="historyList" class="history-list"></div>
     </section>
@@ -915,12 +939,11 @@
             ${strategy.indicators.map((indicator, indicatorIndex) => `
               <div class="indicator-row">
                 <input type="text" value="${escapeHtml(indicator.name)}" placeholder="ชื่อตัวชี้วัด" onchange="updateIndicator(${strategyIndex}, ${indicatorIndex}, 'name', this.value)">
-                <input type="text" value="${escapeHtml(indicator.value || '')}" placeholder="ค่าปัจจุบัน เช่น 75%" onchange="updateIndicator(${strategyIndex}, ${indicatorIndex}, 'value', this.value)">
                 <input type="text" value="${escapeHtml(indicator.target || '')}" placeholder="ค่าเป้าหมาย เช่น 100%" onchange="updateIndicator(${strategyIndex}, ${indicatorIndex}, 'target', this.value)">
+                <input type="text" value="${escapeHtml(indicator.value || '')}" placeholder="ค่าปัจจุบัน เช่น 75%" onchange="updateIndicator(${strategyIndex}, ${indicatorIndex}, 'value', this.value)">
                 <select onchange="updateIndicator(${strategyIndex}, ${indicatorIndex}, 'status', this.value)">
-                  <option value="completed" ${indicator.status === 'completed' ? 'selected' : ''}>สำเร็จแล้ว</option>
-                  <option value="in_progress" ${indicator.status === 'in_progress' ? 'selected' : ''}>อยู่ระหว่างดำเนินการ</option>
-                  <option value="not_started" ${indicator.status === 'not_started' ? 'selected' : ''}>ยังไม่มีการดำเนินการ</option>
+                  <option value="completed" ${indicator.status === 'completed' ? 'selected' : ''}>บรรลุผลสำเร็จ</option>
+                  <option value="not_started" ${indicator.status !== 'completed' ? 'selected' : ''}>ยังไม่บรรลุผลสำเร็จ</option>
                 </select>
                 <button class="remove-small" onclick="removeIndicator(${strategyIndex}, ${indicatorIndex})">×</button>
               </div>
@@ -944,12 +967,11 @@
       container.innerHTML = overallTargets.map((target, targetIndex) => `
         <div class="overall-target-row">
           <input type="text" value="${escapeHtml(target.name)}" placeholder="ชื่อตัวชี้วัดรวม" onchange="updateOverallTarget(${targetIndex}, 'name', this.value)">
-          <input type="text" value="${escapeHtml(target.value || '')}" placeholder="ค่าปัจจุบัน เช่น 75%" onchange="updateOverallTarget(${targetIndex}, 'value', this.value)">
           <input type="text" value="${escapeHtml(target.target || '')}" placeholder="ค่าเป้าหมาย เช่น 100%" onchange="updateOverallTarget(${targetIndex}, 'target', this.value)">
+          <input type="text" value="${escapeHtml(target.value || '')}" placeholder="ค่าปัจจุบัน เช่น 75%" onchange="updateOverallTarget(${targetIndex}, 'value', this.value)">
           <select onchange="updateOverallTarget(${targetIndex}, 'status', this.value)">
-            <option value="completed" ${target.status === 'completed' ? 'selected' : ''}>สำเร็จแล้ว</option>
-            <option value="in_progress" ${target.status === 'in_progress' ? 'selected' : ''}>อยู่ระหว่างดำเนินการ</option>
-            <option value="not_started" ${target.status === 'not_started' ? 'selected' : ''}>ยังไม่มีการดำเนินการ</option>
+            <option value="completed" ${target.status === 'completed' ? 'selected' : ''}>บรรลุผลสำเร็จ</option>
+            <option value="not_started" ${target.status !== 'completed' ? 'selected' : ''}>ยังไม่บรรลุผลสำเร็จ</option>
           </select>
           <button class="remove-small" onclick="removeOverallTarget(${targetIndex})">×</button>
         </div>
@@ -993,7 +1015,6 @@
     }
 
     function addIndicator(strategyIndex) {
-      const count = strategies[strategyIndex].indicators.length + 1;
       strategies[strategyIndex].indicators.push({
         name: "",
         value: "",
@@ -1016,10 +1037,12 @@
       const grid = document.getElementById('dashboardGrid');
       const overallSummary = document.getElementById('overallSummary');
       const overallTargetDashboard = document.getElementById('overallTargetDashboard');
+      const strategyKpiTitle = document.getElementById('strategyKpiTitle');
       grid.innerHTML = '';
       overallSummary.innerHTML = '';
       overallTargetDashboard.innerHTML = '';
       overallTargetDashboard.classList.remove('active');
+      strategyKpiTitle.style.display = 'none';
 
       const hasOverallTargetData = overallTargets.some(item => item.name || item.value || item.target);
       const visibleStrategies = strategies.filter(strategy => {
@@ -1044,6 +1067,7 @@
       const totalPending = allIndicators.filter(item => item.status === 'not_started').length;
 
       renderOverallTargetDashboard();
+      strategyKpiTitle.style.display = 'block';
       renderOverallSummary(totalIndicators, totalCompleted, totalProgress, totalPending);
 
       visibleStrategies.forEach(strategy => {
@@ -1066,7 +1090,7 @@
             `).join('')}
           </div>
           <div class="progress-meta">
-            <strong>${percent}%</strong> &nbsp;•&nbsp; สำเร็จ ${completed}/${total} ตัวชี้วัด
+            <strong>${percent}%</strong> &nbsp;•&nbsp; บรรลุผลสำเร็จ ${completed}/${total} ตัวชี้วัด
           </div>
           <div class="indicator-values">
             ${visibleIndicators.map((indicator, index) => `
@@ -1083,7 +1107,12 @@
 
     function saveSubmission() {
       const submissions = JSON.parse(localStorage.getItem('strategySubmissions') || '[]');
-      const allIndicators = strategies.flatMap(strategy => strategy.indicators);
+      const visibleStrategies = strategies.filter(strategy => {
+        const hasStrategyText = strategy.theme || strategy.description;
+        const hasIndicatorData = strategy.indicators.some(item => item.name || item.value || item.target);
+        return hasStrategyText || hasIndicatorData;
+      });
+      const allIndicators = visibleStrategies.flatMap(strategy => strategy.indicators.filter(item => item.name || item.value || item.target));
       const total = allIndicators.length;
       const completed = allIndicators.filter(item => item.status === 'completed').length;
       const progress = allIndicators.filter(item => item.status === 'in_progress').length;
@@ -1117,11 +1146,12 @@
             <p class="history-title">ครั้งที่ ${submissions.length - index} • ${item.submittedAt}</p>
             <p class="history-plan">${escapeHtml(item.planInfo?.planName || '-')} • ${escapeHtml(item.planInfo?.agencyName || '-')}</p>
             <p class="history-meta">
-              ${item.strategies.length} ยุทธศาสตร์ • ${item.summary.total} ตัวชี้วัด • สำเร็จ ${item.summary.completed} • อยู่ระหว่างดำเนินการ ${item.summary.progress} • ยังไม่มีการดำเนินการ ${item.summary.pending}
+              ${item.strategies.length} ยุทธศาสตร์ • ${item.summary.total} ตัวชี้วัด • บรรลุผลสำเร็จ ${item.summary.completed} • ยังไม่บรรลุผลสำเร็จ ${(item.summary.progress || 0) + (item.summary.pending || 0)}
             </p>
           </div>
           <div class="history-actions">
             <button class="btn btn-secondary" onclick="loadSubmission(${item.id})">เปิดดู / แก้ไข</button>
+            <button class="btn btn-primary" onclick="exportSubmissionToExcel(${item.id})">Export Excel</button>
             <button class="btn btn-danger" onclick="deleteSubmission(${item.id})">ลบ</button>
           </div>
         </div>
@@ -1154,6 +1184,173 @@
       historyList.innerHTML = '';
     }
 
+
+    function exportSubmissionToExcel(id) {
+      const submissions = JSON.parse(localStorage.getItem('strategySubmissions') || '[]');
+      const selected = submissions.find(item => item.id === id);
+      if (!selected) return;
+      const safeDate = String(selected.submittedAt || Date.now()).replace(/[\\/:*?"<>|,\s]+/g, '_');
+      exportWorkbookXml([selected], `BDE_Dashboard_${safeDate}.xls`);
+    }
+
+    function exportAllHistoryToExcel() {
+      const submissions = JSON.parse(localStorage.getItem('strategySubmissions') || '[]');
+      if (!submissions.length) return;
+      exportWorkbookXml(submissions, 'BDE_Dashboard_History_All.xls');
+    }
+
+    function exportWorkbookXml(submissions, filename) {
+      const summaryRows = [];
+      const overallRows = [];
+      const strategyRows = [];
+      const indicatorRows = [];
+
+      submissions.forEach((item, submissionIndex) => {
+        const submissionNo = submissions.length - submissionIndex;
+        const planName = item.planInfo?.planName || '';
+        const agencyName = item.planInfo?.agencyName || '';
+
+        summaryRows.push({
+          'ครั้งที่': submissionNo,
+          'วันที่ Submit': item.submittedAt || '',
+          'ชื่อแผน': planName,
+          'ชื่อหน่วยงาน': agencyName,
+          'จำนวนยุทธศาสตร์': getVisibleStrategies(item.strategies || []).length,
+          'จำนวนตัวชี้วัดทั้งหมด': item.summary?.total ?? 0,
+          'บรรลุผลสำเร็จ': item.summary?.completed ?? 0,
+          'ยังไม่บรรลุผลสำเร็จ': (item.summary?.progress ?? 0) + (item.summary?.pending ?? 0),
+          'อยู่ระหว่างดำเนินการ': item.summary?.progress ?? 0,
+          'ยังไม่มีการดำเนินการ': item.summary?.pending ?? 0
+        });
+
+        (item.overallTargets || []).forEach((target, targetIndex) => {
+          if (!(target.name || target.value || target.target)) return;
+          overallRows.push({
+            'ครั้งที่': submissionNo,
+            'วันที่ Submit': item.submittedAt || '',
+            'ชื่อแผน': planName,
+            'ชื่อหน่วยงาน': agencyName,
+            'ลำดับตัวชี้วัดรวม': targetIndex + 1,
+            'ชื่อตัวชี้วัดรวม': target.name || '',
+            'ค่าเป้าหมาย': target.target || '',
+            'ค่าปัจจุบัน': target.value || '',
+            'สถานะ': getStatusText(target.status)
+          });
+        });
+
+        getVisibleStrategies(item.strategies || []).forEach((strategy, strategyIndex) => {
+          const visibleIndicators = (strategy.indicators || []).filter(ind => ind.name || ind.value || ind.target);
+          const completed = visibleIndicators.filter(ind => ind.status === 'completed').length;
+          const progress = visibleIndicators.filter(ind => ind.status === 'in_progress').length;
+          const pending = visibleIndicators.filter(ind => ind.status === 'not_started').length;
+          const percent = visibleIndicators.length ? Math.round((completed / visibleIndicators.length) * 100) : 0;
+
+          strategyRows.push({
+            'ครั้งที่': submissionNo,
+            'วันที่ Submit': item.submittedAt || '',
+            'ชื่อแผน': planName,
+            'ชื่อหน่วยงาน': agencyName,
+            'ลำดับยุทธศาสตร์': strategyIndex + 1,
+            'ชื่อยุทธศาสตร์': strategy.theme || '',
+            'คำอธิบายยุทธศาสตร์': strategy.description || '',
+            'จำนวนตัวชี้วัด': visibleIndicators.length,
+            'สำเร็จแล้ว': completed,
+            'อยู่ระหว่างดำเนินการ': progress,
+            'ยังไม่มีการดำเนินการ': pending,
+            '% สำเร็จ': percent
+          });
+
+          visibleIndicators.forEach((indicator, indicatorIndex) => {
+            indicatorRows.push({
+              'ครั้งที่': submissionNo,
+              'วันที่ Submit': item.submittedAt || '',
+              'ชื่อแผน': planName,
+              'ชื่อหน่วยงาน': agencyName,
+              'ลำดับยุทธศาสตร์': strategyIndex + 1,
+              'ชื่อยุทธศาสตร์': strategy.theme || '',
+              'ลำดับตัวชี้วัด': indicatorIndex + 1,
+              'ชื่อตัวชี้วัด': indicator.name || '',
+              'ค่าเป้าหมาย': indicator.target || '',
+              'ค่าปัจจุบัน': indicator.value || '',
+              'สถานะ': getStatusText(indicator.status)
+            });
+          });
+        });
+      });
+
+      const sheets = [
+        { name: 'Summary', rows: summaryRows },
+        { name: 'Overall_Targets', rows: overallRows },
+        { name: 'Strategies', rows: strategyRows },
+        { name: 'Indicators', rows: indicatorRows }
+      ];
+
+      const xml = buildExcelXml(sheets);
+      downloadTextFile(xml, filename, 'application/vnd.ms-excel;charset=utf-8;');
+    }
+
+    function buildExcelXml(sheets) {
+      const workbookStart = `<?xml version="1.0" encoding="UTF-8"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
+ <Styles>
+  <Style ss:ID="Header">
+   <Font ss:Bold="1"/>
+   <Interior ss:Color="#EAF6E7" ss:Pattern="Solid"/>
+  </Style>
+ </Styles>`;
+      const workbookEnd = `</Workbook>`;
+
+      const worksheets = sheets.map(sheet => {
+        const rows = sheet.rows && sheet.rows.length ? sheet.rows : [{ 'ข้อมูล': 'ไม่มีข้อมูล' }];
+        const headers = Object.keys(rows[0]);
+        const headerRow = `<Row>${headers.map(h => `<Cell ss:StyleID="Header"><Data ss:Type="String">${xmlEscape(h)}</Data></Cell>`).join('')}</Row>`;
+        const dataRows = rows.map(row => {
+          return `<Row>${headers.map(h => {
+            const value = row[h] ?? '';
+            const isNumber = typeof value === 'number' && isFinite(value);
+            return `<Cell><Data ss:Type="${isNumber ? 'Number' : 'String'}">${xmlEscape(value)}</Data></Cell>`;
+          }).join('')}</Row>`;
+        }).join('');
+        const columns = headers.map(() => `<Column ss:Width="140"/>`).join('');
+        return `<Worksheet ss:Name="${xmlEscape(sheet.name).slice(0, 31)}"><Table>${columns}${headerRow}${dataRows}</Table></Worksheet>`;
+      }).join('');
+
+      return workbookStart + worksheets + workbookEnd;
+    }
+
+    function downloadTextFile(content, filename, mimeType) {
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    function xmlEscape(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&apos;');
+    }
+
+    function getVisibleStrategies(strategyList) {
+      return strategyList.filter(strategy => {
+        const hasStrategyText = strategy.theme || strategy.description;
+        const hasIndicatorData = (strategy.indicators || []).some(item => item.name || item.value || item.target);
+        return hasStrategyText || hasIndicatorData;
+      });
+    }
+
     function renderOverallTargetDashboard() {
       const dashboard = document.getElementById('overallTargetDashboard');
       const visibleTargets = overallTargets.filter(item => item.name || item.value);
@@ -1180,40 +1377,31 @@
     }
 
     function getStatusText(status) {
-      if (status === 'completed') return 'สำเร็จแล้ว';
-      if (status === 'in_progress') return 'อยู่ระหว่างดำเนินการ';
-      return 'ยังไม่มีการดำเนินการ';
+      if (status === 'completed') return 'บรรลุผลสำเร็จ';
+      return 'ยังไม่บรรลุผลสำเร็จ';
     }
 
     function renderOverallSummary(total, completed, progress, pending) {
       const overallSummary = document.getElementById('overallSummary');
       const completedPercent = total === 0 ? 0 : Math.round((completed / total) * 100);
-      const progressPercent = total === 0 ? 0 : Math.round((progress / total) * 100);
-      const pendingPercent = total === 0 ? 0 : Math.round((pending / total) * 100);
+      const notCompleted = progress + pending;
+      const notCompletedPercent = total === 0 ? 0 : Math.round((notCompleted / total) * 100);
 
       overallSummary.innerHTML = `
         <div class="summary-kpi completed">
-          <div class="kpi-icon">✓</div>
+          <div class="kpi-donut" style="--p:${completedPercent}"><span>${completedPercent}%</span></div>
           <div class="kpi-content">
             <p class="kpi-label">ตัวชี้วัดบรรลุผลสำเร็จ</p>
             <div class="kpi-main"><span class="kpi-number">${completed}</span><span class="kpi-unit">ตัวชี้วัด</span></div>
-            <span class="kpi-percent">${completedPercent}% จากทั้งหมด ${total} ตัวชี้วัด</span>
-          </div>
-        </div>
-        <div class="summary-kpi progress">
-          <div class="kpi-icon">↗</div>
-          <div class="kpi-content">
-            <p class="kpi-label">ตัวชี้วัดอยู่ระหว่างดำเนินการ</p>
-            <div class="kpi-main"><span class="kpi-number">${progress}</span><span class="kpi-unit">ตัวชี้วัด</span></div>
-            <span class="kpi-percent">${progressPercent}% จากทั้งหมด ${total} ตัวชี้วัด</span>
+            <span class="kpi-percent">จากทั้งหมด ${total} ตัวชี้วัด</span>
           </div>
         </div>
         <div class="summary-kpi pending">
-          <div class="kpi-icon">−</div>
+          <div class="kpi-donut" style="--p:${notCompletedPercent}"><span>${notCompletedPercent}%</span></div>
           <div class="kpi-content">
-            <p class="kpi-label">ตัวชี้วัดยังไม่มีการดำเนินการ</p>
-            <div class="kpi-main"><span class="kpi-number">${pending}</span><span class="kpi-unit">ตัวชี้วัด</span></div>
-            <span class="kpi-percent">${pendingPercent}% จากทั้งหมด ${total} ตัวชี้วัด</span>
+            <p class="kpi-label">ตัวชี้วัดยังไม่บรรลุผลสำเร็จ</p>
+            <div class="kpi-main"><span class="kpi-number">${notCompleted}</span><span class="kpi-unit">ตัวชี้วัด</span></div>
+            <span class="kpi-percent">จากทั้งหมด ${total} ตัวชี้วัด</span>
           </div>
         </div>
       `;
