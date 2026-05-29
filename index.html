@@ -2451,25 +2451,29 @@
       document.getElementById('adminIndicatorTable').innerHTML = '';
     }
 
-    function loadAllSubmissions() {
-      if (!adminLoggedIn) {
-        alert('กรุณา Login ก่อน');
-        return;
-      }
+async function loadAllSubmissions() {
+  if (!adminLoggedIn) {
+    alert('กรุณา Login ก่อน');
+    return;
+  }
 
-      if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === 'PASTE_YOUR_WEB_APP_URL_HERE') {
-        alert('ยังไม่ได้ใส่ Google Apps Script Web App URL ในไฟล์ HTML');
-        return;
-      }
+  try {
+    const response = await fetch(GOOGLE_SCRIPT_URL);
+    const data = await response.json();
 
-      loadJsonp(GOOGLE_SCRIPT_URL, function(data) {
-        allRemoteData = data;
+    console.log('Admin data from Google Sheets:', data);
 
-        renderAdminSummary(data);
-        renderAdminSubmissionList(data);
-        renderAdminIndicatorTable(data);
-      });
-    }
+    allRemoteData = data;
+
+    renderAdminSummary(data);
+    renderAdminSubmissionList(data);
+    renderAdminIndicatorTable(data);
+
+  } catch (error) {
+    console.error('Load admin data error:', error);
+    alert('ไม่สามารถดึงข้อมูลจากฐานข้อมูลกลางได้ กรุณาตรวจสอบ Apps Script URL หรือการ Deploy');
+  }
+}
 
     function loadJsonp(url, callback) {
       const callbackName = 'jsonpCallback_' + Date.now();
