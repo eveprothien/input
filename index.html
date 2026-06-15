@@ -2125,6 +2125,16 @@
       return normalized === '' ? 0 : Number(normalized);
     }
 
+    function getRemoteProgressValue(rawProgress, status) {
+      const normalized = normalizeProgressValue(rawProgress);
+      if (normalized !== '') return String(normalized);
+
+      // ข้อมูลเก่าจาก Google Sheets อาจยังไม่มีคอลัมน์ progress_value
+      // จึง fallback จากสถานะเดิม เพื่อไม่ให้ตัวชี้วัดที่ completed กลายเป็น 0% ทั้งหมด
+      if (status === 'completed') return '100';
+      return '0';
+    }
+
     function getProgressColor(value) {
       const numericValue = getProgressNumericValue(value);
       if (numericValue >= 100) return '#43b02a';
@@ -2385,8 +2395,12 @@
 
       list.innerHTML = submissions.map(item => {
         const id = item.submission_id || '';
-        const totalIndicators = (data.indicators || []).filter(ind => ind.submission_id === id).length;
-        const completed = (data.indicators || []).filter(ind => ind.submission_id === id && ind.status === 'completed').length;
+        const relatedIndicators = (data.indicators || []).filter(ind => ind.submission_id === id);
+        const totalIndicators = relatedIndicators.length;
+        const completed = relatedIndicators.filter(ind => {
+          const progressValue = getRemoteProgressValue(ind.progress_value || ind.progressValue || ind.progress_value_text, ind.status);
+          return getDashboardCategoryByProgress(progressValue) === 'is-completed';
+        }).length;
         const notCompleted = totalIndicators - completed;
 
         return `
@@ -2447,7 +2461,7 @@
           target: item.target_value,
           value: item.current_value,
           status: item.status,
-          progressValue: item.progress_value || item.progressValue || item.progress_value_text || '' 
+          progressValue: getRemoteProgressValue(item.progress_value || item.progressValue || item.progress_value_text, item.status) 
         }));
 
       const selectedStrategies = (allRemoteData.strategies || [])
@@ -2460,7 +2474,7 @@
               target: ind.target_value,
               value: ind.current_value,
               status: ind.status,
-              progressValue: ind.progress_value || ind.progressValue || ind.progress_value_text || '' 
+              progressValue: getRemoteProgressValue(ind.progress_value || ind.progressValue || ind.progress_value_text, ind.status) 
             }));
 
           return {
