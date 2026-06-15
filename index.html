@@ -288,13 +288,174 @@
     .indicator-row,
     .overall-target-row {
       display: grid;
-      grid-template-columns: 1fr 160px 160px 180px 42px;
+      grid-template-columns: 1fr 145px 145px 200px minmax(340px, 1fr) 42px;
       gap: 8px;
       align-items: center;
       background: var(--grey-100);
       border: 1px solid var(--grey-200);
       border-radius: 12px;
       padding: 8px;
+    }
+
+    .progress-field {
+      --progress-color: #d92d20;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 340px;
+      width: 100%;
+      min-height: 44px;
+      padding: 0;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+    }
+
+    .progress-slider-wrap {
+      flex: 1 1 auto;
+      min-width: 140px;
+      display: flex;
+      align-items: center;
+    }
+
+    .progress-display-box {
+      flex: 0 0 185px;
+      height: 44px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+      border: 1px solid var(--grey-300);
+      border-radius: 12px;
+      background: var(--white);
+      color: #344054;
+      white-space: nowrap;
+    }
+
+    .progress-display-box input.progress-number {
+      width: 44px;
+      min-width: 44px;
+      height: auto;
+      padding: 0;
+      text-align: right;
+      font-weight: 500;
+      font-size: 16px;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      outline: none;
+    }
+
+    .progress-display-box input.progress-number:focus {
+      border: 0;
+      box-shadow: none;
+      outline: none;
+    }
+
+    .progress-display-box input.progress-number::-webkit-outer-spin-button,
+    .progress-display-box input.progress-number::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .progress-display-box input.progress-number[type=number] {
+      -moz-appearance: textfield;
+    }
+
+    .progress-display-suffix {
+      color: var(--grey-500);
+      font-size: 12px;
+      font-weight: 500;
+      margin-right: 2px;
+    }
+
+    .progress-display-divider {
+      width: 1px;
+      height: 20px;
+      background: var(--grey-200);
+      flex: 0 0 1px;
+    }
+
+    .progress-display-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: #344054;
+    }
+
+    .progress-range {
+
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 12px;
+      margin: 0;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--progress-color) 0%, var(--progress-color) 0%, #d6dbd8 0%, #d6dbd8 100%);
+      outline: none;
+      cursor: pointer;
+    }
+
+    .progress-range::-webkit-slider-runnable-track {
+      height: 12px;
+      border-radius: 999px;
+      background: transparent;
+    }
+
+    .progress-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      margin-top: -6px;
+      border-radius: 50%;
+      background: var(--progress-color);
+      border: 2px solid #ffffff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.16);
+    }
+
+    .progress-range::-moz-range-thumb {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--progress-color);
+      border: 2px solid #ffffff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.16);
+    }
+
+    .progress-range::-moz-range-track {
+      height: 12px;
+      border-radius: 999px;
+      background: transparent;
+    }
+
+    .mini-progress {
+      margin-top: 12px;
+    }
+
+    .mini-progress-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      color: #52645a;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .mini-progress-track {
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      background: #edf2ef;
+      overflow: hidden;
+    }
+
+    .mini-progress-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--green), #94d179);
     }
 
     .remove-small {
@@ -357,6 +518,10 @@
       opacity: 0.9;
     }
 
+    .overall-target-card.is-below-plan::before { background: #d92d20; }
+    .overall-target-card.is-on-plan::before { background: var(--yellow); }
+    .overall-target-card.is-completed::before { background: var(--green); }
+
     .overall-target-name {
       margin: 0 0 14px;
       color: #3b4a42;
@@ -380,7 +545,7 @@
       padding: 4px 12px;
       border-radius: 999px;
       font-size: 13px;
-      font-weight: 800;
+      font-weight: 500;
     }
 
     .overall-target-status.completed {
@@ -398,6 +563,24 @@
       background: #edf1ef;
     }
 
+    .overall-target-status.is-below-plan {
+      color: #b42318;
+      background: #fff3f2;
+      border: 1px solid #f0c7c4;
+    }
+
+    .overall-target-status.is-on-plan {
+      color: #7a5a00;
+      background: #fff7dd;
+      border: 1px solid #f4dfa0;
+    }
+
+    .overall-target-status.is-completed {
+      color: var(--green-dark);
+      background: #d8f0d2;
+      border: 1px solid #b7dfad;
+    }
+
     .result-section-title {
       display: none;
       margin: 2px 0 12px;
@@ -408,7 +591,7 @@
 
     .overall-summary {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 16px;
       margin: 8px 0 22px;
     }
@@ -436,9 +619,9 @@
       width: 7px;
     }
 
-    .summary-kpi.completed::before { background: var(--green); }
-    .summary-kpi.progress::before { background: var(--yellow); }
-    .summary-kpi.pending::before { background: #b9c4be; }
+    .summary-kpi.is-completed::before { background: var(--green); }
+    .summary-kpi.is-on-plan::before { background: var(--yellow); }
+    .summary-kpi.is-below-plan::before { background: #d92d20; }
 
     .kpi-donut {
       --p: 0;
@@ -474,9 +657,9 @@
       line-height: 1;
     }
 
-    .summary-kpi.completed .kpi-donut { --c: var(--green); }
-    .summary-kpi.progress .kpi-donut { --c: var(--yellow); }
-    .summary-kpi.pending .kpi-donut { --c: #b9c4be; }
+    .summary-kpi.is-completed .kpi-donut { --c: var(--green); }
+    .summary-kpi.is-on-plan .kpi-donut { --c: var(--yellow); }
+    .summary-kpi.is-below-plan .kpi-donut { --c: #d92d20; }
 
     .kpi-content {
       position: relative;
@@ -617,17 +800,17 @@
       box-shadow: inset 0 -1px 0 rgba(0,0,0,0.04);
     }
 
-    .block.completed {
+    .block.is-completed {
       background: var(--green);
     }
 
-    .block.in_progress {
+    .block.is-on-plan {
       background: var(--yellow);
       color: #4a3a00;
     }
 
-    .block.not_started {
-      background: #e4e9e6;
+    .block.is-below-plan {
+      background: #d92d20;
       color: #fff;
     }
 
@@ -675,6 +858,40 @@
       background: var(--green-soft);
       color: var(--green-dark);
       font-size: 11px;
+    }
+
+
+    .value-chip.is-completed {
+      border-color: #b7dfad;
+      background: #eef8ea;
+      color: #1f5f13;
+    }
+
+    .value-chip.is-completed span {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .value-chip.is-on-plan {
+      border-color: #f4dfa0;
+      background: #fff7dd;
+      color: #7a5a00;
+    }
+
+    .value-chip.is-on-plan span {
+      background: var(--yellow);
+      color: #4a3a00;
+    }
+
+    .value-chip.is-below-plan {
+      border-color: #f0c7c4;
+      background: #fff3f2;
+      color: #b42318;
+    }
+
+    .value-chip.is-below-plan span {
+      background: #d92d20;
+      color: #fff;
     }
 
     .progress-meta strong {
@@ -1516,6 +1733,7 @@
 
 /* Make right dashboard compact and balanced */
 #adminSelectedSummary.overall-summary {
+  grid-template-columns: repeat(3, 1fr) !important;
   gap: 14px !important;
   margin: 10px 0 22px !important;
 }
@@ -1849,7 +2067,7 @@
     };
 
     let overallTargets = [
-      { name: "", value: "", target: "", status: "not_started" }
+      { name: "", value: "", target: "", status: "not_started", progressValue: "0" }
     ];
 
     let strategies = [
@@ -1858,7 +2076,7 @@
         theme: "",
         description: "",
         indicators: [
-          { name: "", value: "", target: "", status: "not_started" }
+          { name: "", value: "", target: "", status: "not_started", progressValue: "0" }
         ]
       }
     ];
@@ -1884,6 +2102,110 @@
       if (tabName === 'admin' && adminNavBtn) {
         adminNavBtn.classList.add('active');
       }
+    }
+
+
+    function normalizeProgressValue(value) {
+      if (value === null || value === undefined || value === '') return '';
+      const cleaned = String(value).replace(/[^0-9.]/g, '');
+      if (!cleaned) return '';
+      let number = Number(cleaned);
+      if (!isFinite(number)) return '';
+      number = Math.max(0, Math.min(100, number));
+      return Math.round(number);
+    }
+
+    function formatProgressDisplay(value) {
+      const normalized = normalizeProgressValue(value);
+      return normalized === '' ? '-' : `${normalized}%`;
+    }
+
+    function getProgressNumericValue(value) {
+      const normalized = normalizeProgressValue(value);
+      return normalized === '' ? 0 : Number(normalized);
+    }
+
+    function getProgressColor(value) {
+      const numericValue = getProgressNumericValue(value);
+      if (numericValue >= 100) return '#43b02a';
+      if (numericValue >= 80) return '#f1c232';
+      return '#d92d20';
+    }
+
+    function getProgressFieldHtml(type, primaryIndex, secondaryIndex, rawValue) {
+      const normalized = normalizeProgressValue(rawValue);
+      const displayValue = normalized === '' ? 0 : normalized;
+      const secondaryArg = type === 'overall' ? 'null' : secondaryIndex;
+      const color = getProgressColor(displayValue);
+
+      return `
+        <div class="progress-field" style="--progress-color:${color};">
+          <div class="progress-slider-wrap">
+            <input type="range" min="0" max="100" step="1" class="progress-range" value="${displayValue}" oninput="syncProgressInput(this, '${type}', ${primaryIndex}, ${secondaryArg}, this.value)">
+          </div>
+          <div class="progress-display-box">
+            <input type="number" min="0" max="100" step="1" class="progress-number" value="${displayValue}" oninput="syncProgressInput(this, '${type}', ${primaryIndex}, ${secondaryArg}, this.value)">
+            <span class="progress-display-suffix">%</span>
+            <span class="progress-display-divider"></span>
+            <span class="progress-display-label">ค่าความก้าวหน้า</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function applyProgressValueToData(type, primaryIndex, secondaryIndex, value) {
+      const normalized = normalizeProgressValue(value);
+      const finalValue = normalized === '' ? '0' : String(normalized);
+      if (type === 'overall') {
+        overallTargets[primaryIndex].progressValue = finalValue;
+      } else {
+        strategies[primaryIndex].indicators[secondaryIndex].progressValue = finalValue;
+      }
+      return finalValue;
+    }
+
+    function refreshProgressFieldUi(wrapper, value) {
+      const numericValue = getProgressNumericValue(value);
+      const color = getProgressColor(numericValue);
+      const numberInput = wrapper.querySelector('.progress-number');
+      const rangeInput = wrapper.querySelector('.progress-range');
+      wrapper.style.setProperty('--progress-color', color);
+      if (numberInput) numberInput.value = numericValue;
+      if (rangeInput) {
+        rangeInput.value = numericValue;
+        rangeInput.style.background = `linear-gradient(90deg, ${color} 0%, ${color} ${numericValue}%, #d6dbd8 ${numericValue}%, #d6dbd8 100%)`;
+      }
+    }
+
+    function syncProgressInput(element, type, primaryIndex, secondaryIndex, rawValue) {
+      const finalValue = applyProgressValueToData(type, primaryIndex, secondaryIndex, rawValue);
+      const wrapper = element.closest('.progress-field');
+      if (wrapper) refreshProgressFieldUi(wrapper, finalValue);
+    }
+
+    function setProgressValue(button, type, primaryIndex, secondaryIndex, value) {
+      const finalValue = applyProgressValueToData(type, primaryIndex, secondaryIndex, value);
+      const wrapper = button.closest('.progress-field');
+      if (wrapper) refreshProgressFieldUi(wrapper, finalValue);
+    }
+
+    function initProgressFields(scope = document) {
+      scope.querySelectorAll('.progress-field').forEach(wrapper => {
+        const numberInput = wrapper.querySelector('.progress-number');
+        const value = numberInput ? numberInput.value : 0;
+        refreshProgressFieldUi(wrapper, value);
+      });
+    }
+
+    function getMiniProgressHtml(value, label = 'ค่าความก้าวหน้า') {
+      const progress = getProgressNumericValue(value);
+      const color = getProgressColor(progress);
+      return `
+        <div class="mini-progress">
+          <div class="mini-progress-head"><span>${label}</span><strong>${progress}%</strong></div>
+          <div class="mini-progress-track"><div class="mini-progress-fill" style="width:${progress}%; background:${color};"></div></div>
+        </div>
+      `;
     }
 
     function renderForms() {
@@ -1932,6 +2254,7 @@
                   <option value="completed" ${indicator.status === 'completed' ? 'selected' : ''}>บรรลุผลสำเร็จ</option>
                   <option value="not_started" ${indicator.status !== 'completed' ? 'selected' : ''}>ยังไม่บรรลุผลสำเร็จ</option>
                 </select>
+                ${getProgressFieldHtml('indicator', strategyIndex, indicatorIndex, indicator.progressValue)}
                 <button class="remove-small" onclick="removeIndicator(${strategyIndex}, ${indicatorIndex})">×</button>
               </div>
             `).join('')}
@@ -1940,6 +2263,9 @@
 
         container.appendChild(card);
       });
+
+      initProgressFields(container);
+      initProgressFields(document.getElementById('overallTargetForms'));
     }
 
     function updatePlanInfo() {
@@ -1960,18 +2286,23 @@
             <option value="completed" ${target.status === 'completed' ? 'selected' : ''}>บรรลุผลสำเร็จ</option>
             <option value="not_started" ${target.status !== 'completed' ? 'selected' : ''}>ยังไม่บรรลุผลสำเร็จ</option>
           </select>
+          ${getProgressFieldHtml('overall', targetIndex, null, target.progressValue)}
           <button class="remove-small" onclick="removeOverallTarget(${targetIndex})">×</button>
         </div>
       `).join('');
+
+      initProgressFields(container);
     }
 
     function addOverallTarget() {
-      overallTargets.push({ name: "", value: "", target: "", status: "not_started" });
+      overallTargets.push({ name: "", value: "", target: "", status: "not_started", progressValue: "0" });
       renderOverallTargetForms();
     }
 
     function updateOverallTarget(index, field, value) {
-      overallTargets[index][field] = value;
+      overallTargets[index][field] = field === 'progressValue'
+        ? String(getProgressNumericValue(value))
+        : value;
     }
 
     function removeOverallTarget(index) {
@@ -1986,7 +2317,7 @@
         theme: "",
         description: "",
         indicators: [
-          { name: "", value: "", target: "", status: "not_started" }
+          { name: "", value: "", target: "", status: "not_started", progressValue: "0" }
         ]
       });
       renderForms();
@@ -2115,7 +2446,8 @@
           name: item.target_name,
           target: item.target_value,
           value: item.current_value,
-          status: item.status
+          status: item.status,
+          progressValue: item.progress_value || item.progressValue || item.progress_value_text || '' 
         }));
 
       const selectedStrategies = (allRemoteData.strategies || [])
@@ -2127,7 +2459,8 @@
               name: ind.indicator_name,
               target: ind.target_value,
               value: ind.current_value,
-              status: ind.status
+              status: ind.status,
+              progressValue: ind.progress_value || ind.progressValue || ind.progress_value_text || '' 
             }));
 
           return {
@@ -2178,13 +2511,16 @@
       container.innerHTML = `
         <h3 class="overall-target-title">สถานะความสำเร็จของตัวชี้วัดรวม</h3>
         <div class="overall-target-grid">
-          ${visibleTargets.map(item => `
-            <div class="overall-target-card">
-              <p class="overall-target-name">${escapeHtml(item.name || '-')}</p>
-              <div class="overall-target-value">${escapeHtml(item.value || '-')}</div>
-              <span class="overall-target-status ${item.status}">${getStatusText(item.status)}</span>
-            </div>
-          `).join('')}
+          ${visibleTargets.map(item => {
+            const category = getDashboardCategoryByProgress(item.progressValue);
+            return `
+              <div class="overall-target-card ${category}">
+                <p class="overall-target-name">${escapeHtml(item.name || '-')}</p>
+                <div class="overall-target-value">${escapeHtml(item.value || '-')}</div>
+                <span class="overall-target-status ${category}">${getDashboardCategoryLabel(category)}</span>
+              </div>
+            `;
+          }).join('')}
         </div>
       `;
     }
@@ -2200,28 +2536,25 @@
 
       const visibleStrategies = (strategyList || []).filter(strategy => {
         const hasStrategyText = strategy.theme || strategy.description;
-        const hasIndicatorData = (strategy.indicators || []).some(item => item.name || item.value || item.target);
+        const hasIndicatorData = (strategy.indicators || []).some(item => item.name || item.value || item.target || item.progressValue);
         return hasStrategyText || hasIndicatorData;
       });
 
       const allIndicators = visibleStrategies.flatMap(strategy =>
-        (strategy.indicators || []).filter(item => item.name || item.value || item.target)
+        (strategy.indicators || []).filter(item => item.name || item.value || item.target || item.progressValue)
       );
 
-      const total = allIndicators.length;
-      const completed = allIndicators.filter(item => item.status === 'completed').length;
-      const progress = 0;
-      const pending = total - completed;
+      const summaryCounts = countDashboardCategories(allIndicators);
 
-      if (total > 0) {
+      if (summaryCounts.total > 0) {
         title.style.display = 'block';
-        renderAdminSelectedSummary(total, completed, progress, pending);
+        renderAdminSelectedSummary(summaryCounts);
       }
 
       visibleStrategies.forEach(strategy => {
-        const visibleIndicators = (strategy.indicators || []).filter(item => item.name || item.value || item.target);
+        const visibleIndicators = (strategy.indicators || []).filter(item => item.name || item.value || item.target || item.progressValue);
         const strategyTotal = visibleIndicators.length;
-        const strategyCompleted = visibleIndicators.filter(item => item.status === 'completed').length;
+        const strategyCompleted = visibleIndicators.filter(item => getDashboardCategoryByProgress(item.progressValue) === 'is-completed').length;
         const percent = strategyTotal === 0 ? 0 : Math.round((strategyCompleted / strategyTotal) * 100);
 
         const card = document.createElement('div');
@@ -2233,43 +2566,55 @@
           </div>
           <p class="strategy-desc">${escapeHtml(strategy.description || '-')}</p>
           <div class="progress-blocks">
-            ${visibleIndicators.map((indicator, index) => `
-              <div class="block ${indicator.status}" title="${escapeHtml(indicator.name || 'ตัวชี้วัด')}">${index + 1}</div>
-            `).join('')}
+            ${visibleIndicators.map((indicator, index) => {
+              const category = getDashboardCategoryByProgress(indicator.progressValue);
+              const title = `${escapeHtml(indicator.name || 'ตัวชี้วัด')} • ${getDashboardCategoryLabel(category)} • ${formatProgressDisplay(indicator.progressValue)}`;
+              return `<div class="block ${category}" title="${title}">${index + 1}</div>`;
+            }).join('')}
           </div>
           <div class="progress-meta">
             <strong>${percent}%</strong> &nbsp;•&nbsp; บรรลุผลสำเร็จ ${strategyCompleted}/${strategyTotal} ตัวชี้วัด
           </div>
           <div class="indicator-values">
-            ${visibleIndicators.map((indicator, index) => `
-              <div class="value-chip"><span>${index + 1}</span>${escapeHtml(indicator.value || '-')}</div>
-            `).join('')}
+            ${visibleIndicators.map((indicator, index) => {
+              const category = getDashboardCategoryByProgress(indicator.progressValue);
+              return `<div class="value-chip ${category}"><span>${index + 1}</span>${escapeHtml(indicator.value || '-')}</div>`;
+            }).join('')}
           </div>
         `;
         grid.appendChild(card);
       });
     }
 
-    function renderAdminSelectedSummary(total, completed, progress, pending) {
+    function renderAdminSelectedSummary(counts) {
       const container = document.getElementById('adminSelectedSummary');
-      const completedPercent = total === 0 ? 0 : Math.round((completed / total) * 100);
-      const notCompleted = pending;
-      const notCompletedPercent = total === 0 ? 0 : Math.round((notCompleted / total) * 100);
+      const total = counts.total || 0;
+      const belowPlanPercent = total === 0 ? 0 : Math.round((counts.belowPlan / total) * 100);
+      const onPlanPercent = total === 0 ? 0 : Math.round((counts.onPlan / total) * 100);
+      const completedPercent = total === 0 ? 0 : Math.round((counts.completed / total) * 100);
 
       container.innerHTML = `
-        <div class="summary-kpi completed">
-          <div class="kpi-donut" style="--p:${completedPercent}"><span>${completedPercent}%</span></div>
+        <div class="summary-kpi is-below-plan">
+          <div class="kpi-donut" style="--p:${belowPlanPercent}"><span>${belowPlanPercent}%</span></div>
           <div class="kpi-content">
-            <p class="kpi-label">ตัวชี้วัดบรรลุผลสำเร็จ</p>
-            <div class="kpi-main"><span class="kpi-number">${completed}</span><span class="kpi-unit">ตัวชี้วัด</span></div>
+            <p class="kpi-label">ตัวชี้วัดต่ำกว่าแผน</p>
+            <div class="kpi-main"><span class="kpi-number">${counts.belowPlan}</span><span class="kpi-unit">ตัวชี้วัด</span></div>
             <span class="kpi-percent">จากทั้งหมด ${total} ตัวชี้วัด</span>
           </div>
         </div>
-        <div class="summary-kpi pending">
-          <div class="kpi-donut" style="--p:${notCompletedPercent}"><span>${notCompletedPercent}%</span></div>
+        <div class="summary-kpi is-on-plan">
+          <div class="kpi-donut" style="--p:${onPlanPercent}"><span>${onPlanPercent}%</span></div>
           <div class="kpi-content">
-            <p class="kpi-label">ตัวชี้วัดยังไม่บรรลุผลสำเร็จ</p>
-            <div class="kpi-main"><span class="kpi-number">${notCompleted}</span><span class="kpi-unit">ตัวชี้วัด</span></div>
+            <p class="kpi-label">ตัวชี้วัดเป็นไปตามแผน</p>
+            <div class="kpi-main"><span class="kpi-number">${counts.onPlan}</span><span class="kpi-unit">ตัวชี้วัด</span></div>
+            <span class="kpi-percent">จากทั้งหมด ${total} ตัวชี้วัด</span>
+          </div>
+        </div>
+        <div class="summary-kpi is-completed">
+          <div class="kpi-donut" style="--p:${completedPercent}"><span>${completedPercent}%</span></div>
+          <div class="kpi-content">
+            <p class="kpi-label">ตัวชี้วัดเสร็จสิ้นแล้ว</p>
+            <div class="kpi-main"><span class="kpi-number">${counts.completed}</span><span class="kpi-unit">ตัวชี้วัด</span></div>
             <span class="kpi-percent">จากทั้งหมด ${total} ตัวชี้วัด</span>
           </div>
         </div>
@@ -2304,7 +2649,8 @@
         name: "",
         value: "",
         target: "",
-        status: "not_started"
+        status: "not_started",
+        progressValue: "0"
       });
       renderForms();
     }
@@ -2315,7 +2661,9 @@
     }
 
     function updateIndicator(strategyIndex, indicatorIndex, field, value) {
-      strategies[strategyIndex].indicators[indicatorIndex][field] = value;
+      strategies[strategyIndex].indicators[indicatorIndex][field] = field === 'progressValue'
+        ? String(getProgressNumericValue(value))
+        : value;
     }
 
     function generateDashboard(shouldSave = true) {
@@ -2329,10 +2677,10 @@
       overallTargetDashboard.classList.remove('active');
       strategyKpiTitle.style.display = 'none';
 
-      const hasOverallTargetData = overallTargets.some(item => item.name || item.value || item.target);
+      const hasOverallTargetData = overallTargets.some(item => item.name || item.value || item.target || item.progressValue);
       const visibleStrategies = strategies.filter(strategy => {
         const hasStrategyText = strategy.theme || strategy.description;
-        const hasIndicatorData = strategy.indicators.some(item => item.name || item.value || item.target);
+        const hasIndicatorData = strategy.indicators.some(item => item.name || item.value || item.target || item.progressValue);
         return hasStrategyText || hasIndicatorData;
       });
 
@@ -2345,20 +2693,17 @@
         return;
       }
 
-      const allIndicators = visibleStrategies.flatMap(strategy => strategy.indicators.filter(item => item.name || item.value || item.target));
-      const totalIndicators = allIndicators.length;
-      const totalCompleted = allIndicators.filter(item => item.status === 'completed').length;
-      const totalProgress = allIndicators.filter(item => item.status === 'in_progress').length;
-      const totalPending = allIndicators.filter(item => item.status === 'not_started').length;
+      const allIndicators = visibleStrategies.flatMap(strategy => strategy.indicators.filter(item => item.name || item.value || item.target || item.progressValue));
+      const summaryCounts = countDashboardCategories(allIndicators);
 
       renderOverallTargetDashboard();
       strategyKpiTitle.style.display = 'block';
-      renderOverallSummary(totalIndicators, totalCompleted, totalProgress, totalPending);
+      renderOverallSummary(summaryCounts);
 
       visibleStrategies.forEach(strategy => {
-        const visibleIndicators = strategy.indicators.filter(item => item.name || item.value || item.target);
+        const visibleIndicators = strategy.indicators.filter(item => item.name || item.value || item.target || item.progressValue);
         const total = visibleIndicators.length;
-        const completed = visibleIndicators.filter(item => item.status === 'completed').length;
+        const completed = visibleIndicators.filter(item => getDashboardCategoryByProgress(item.progressValue) === 'is-completed').length;
         const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
 
         const card = document.createElement('div');
@@ -2370,17 +2715,20 @@
           </div>
           <p class="strategy-desc">${escapeHtml(strategy.description || '-')}</p>
           <div class="progress-blocks">
-            ${visibleIndicators.map((indicator, index) => `
-              <div class="block ${indicator.status}" title="${escapeHtml(indicator.name || 'ตัวชี้วัด')}">${index + 1}</div>
-            `).join('')}
+            ${visibleIndicators.map((indicator, index) => {
+              const category = getDashboardCategoryByProgress(indicator.progressValue);
+              const title = `${escapeHtml(indicator.name || 'ตัวชี้วัด')} • ${getDashboardCategoryLabel(category)} • ${formatProgressDisplay(indicator.progressValue)}`;
+              return `<div class="block ${category}" title="${title}">${index + 1}</div>`;
+            }).join('')}
           </div>
           <div class="progress-meta">
             <strong>${percent}%</strong> &nbsp;•&nbsp; บรรลุผลสำเร็จ ${completed}/${total} ตัวชี้วัด
           </div>
           <div class="indicator-values">
-            ${visibleIndicators.map((indicator, index) => `
-              <div class="value-chip"><span>${index + 1}</span>${escapeHtml(indicator.value || '-')}</div>
-            `).join('')}
+            ${visibleIndicators.map((indicator, index) => {
+              const category = getDashboardCategoryByProgress(indicator.progressValue);
+              return `<div class="value-chip ${category}"><span>${index + 1}</span>${escapeHtml(indicator.value || '-')}</div>`;
+            }).join('')}
           </div>
         `;
         grid.appendChild(card);
@@ -2394,10 +2742,10 @@
       const submissions = JSON.parse(localStorage.getItem('strategySubmissions') || '[]');
       const visibleStrategies = strategies.filter(strategy => {
         const hasStrategyText = strategy.theme || strategy.description;
-        const hasIndicatorData = strategy.indicators.some(item => item.name || item.value || item.target);
+        const hasIndicatorData = strategy.indicators.some(item => item.name || item.value || item.target || item.progressValue);
         return hasStrategyText || hasIndicatorData;
       });
-      const allIndicators = visibleStrategies.flatMap(strategy => strategy.indicators.filter(item => item.name || item.value || item.target));
+      const allIndicators = visibleStrategies.flatMap(strategy => strategy.indicators.filter(item => item.name || item.value || item.target || item.progressValue));
       const total = allIndicators.length;
       const completed = allIndicators.filter(item => item.status === 'completed').length;
       const progress = allIndicators.filter(item => item.status === 'in_progress').length;
@@ -2449,7 +2797,7 @@
       if (!selected) return;
 
       planInfo = selected.planInfo ? JSON.parse(JSON.stringify(selected.planInfo)) : { planName: "", agencyName: "" };
-      overallTargets = selected.overallTargets ? JSON.parse(JSON.stringify(selected.overallTargets)) : [{ name: "", value: "", target: "", status: "not_started" }];
+      overallTargets = selected.overallTargets ? JSON.parse(JSON.stringify(selected.overallTargets)) : [{ name: "", value: "", target: "", status: "not_started", progressValue: "0" }];
       strategies = JSON.parse(JSON.stringify(selected.strategies));
       renderForms();
       generateDashboard(false);
@@ -2519,12 +2867,13 @@
             'ชื่อตัวชี้วัดรวม': target.name || '',
             'ค่าเป้าหมาย': target.target || '',
             'ค่าปัจจุบัน': target.value || '',
-            'สถานะ': getStatusText(target.status)
+            'สถานะ': getStatusText(target.status),
+            'ค่าความก้าวหน้า': target.progressValue || ''
           });
         });
 
         getVisibleStrategies(item.strategies || []).forEach((strategy, strategyIndex) => {
-          const visibleIndicators = (strategy.indicators || []).filter(ind => ind.name || ind.value || ind.target);
+          const visibleIndicators = (strategy.indicators || []).filter(ind => ind.name || ind.value || ind.target || ind.progressValue);
           const completed = visibleIndicators.filter(ind => ind.status === 'completed').length;
           const progress = visibleIndicators.filter(ind => ind.status === 'in_progress').length;
           const pending = visibleIndicators.filter(ind => ind.status === 'not_started').length;
@@ -2557,7 +2906,8 @@
               'ชื่อตัวชี้วัด': indicator.name || '',
               'ค่าเป้าหมาย': indicator.target || '',
               'ค่าปัจจุบัน': indicator.value || '',
-              'สถานะ': getStatusText(indicator.status)
+              'สถานะ': getStatusText(indicator.status),
+              'ค่าความก้าวหน้า': indicator.progressValue || ''
             });
           });
         });
@@ -2631,7 +2981,7 @@
     function getVisibleStrategies(strategyList) {
       return strategyList.filter(strategy => {
         const hasStrategyText = strategy.theme || strategy.description;
-        const hasIndicatorData = (strategy.indicators || []).some(item => item.name || item.value || item.target);
+        const hasIndicatorData = (strategy.indicators || []).some(item => item.name || item.value || item.target || item.progressValue);
         return hasStrategyText || hasIndicatorData;
       });
     }
@@ -2855,6 +3205,7 @@ function renderAdminIndicatorTable(data) {
             <th>ค่าเป้าหมาย</th>
             <th>ค่าปัจจุบัน</th>
             <th>สถานะ</th>
+            <th>ค่าความก้าวหน้า</th>
           </tr>
         </thead>
         <tbody>
@@ -2872,6 +3223,7 @@ function renderAdminIndicatorTable(data) {
                 <td>${escapeHtml(ind.target_value || '-')}</td>
                 <td>${escapeHtml(ind.current_value || '-')}</td>
                 <td>${escapeHtml(getStatusText(ind.status))}</td>
+                <td>${escapeHtml(ind.progress_value || ind.progressValue || '-')}</td>
               </tr>
             `;
           }).join('')}
@@ -2906,15 +3258,47 @@ function renderAdminIndicatorTable(data) {
       dashboard.innerHTML = `
         <h3 class="overall-target-title">สถานะความสำเร็จของตัวชี้วัดรวม</h3>
         <div class="overall-target-grid">
-          ${visibleTargets.map(item => `
-            <div class="overall-target-card">
-              <p class="overall-target-name">${escapeHtml(item.name || '-')}</p>
-              <div class="overall-target-value">${escapeHtml(item.value || '-')}</div>
-              <span class="overall-target-status ${item.status}">${getStatusText(item.status)}</span>
-            </div>
-          `).join('')}
+          ${visibleTargets.map(item => {
+            const category = getDashboardCategoryByProgress(item.progressValue);
+            return `
+              <div class="overall-target-card ${category}">
+                <p class="overall-target-name">${escapeHtml(item.name || '-')}</p>
+                <div class="overall-target-value">${escapeHtml(item.value || '-')}</div>
+                <span class="overall-target-status ${category}">${getDashboardCategoryLabel(category)}</span>
+              </div>
+            `;
+          }).join('')}
         </div>
       `;
+    }
+
+
+    function getDashboardCategoryByProgress(value) {
+      const numericValue = getProgressNumericValue(value);
+      if (numericValue >= 100) return 'is-completed';
+      if (numericValue >= 80) return 'is-on-plan';
+      return 'is-below-plan';
+    }
+
+    function getDashboardCategoryLabel(category) {
+      if (category === 'is-completed') return 'เสร็จสิ้นแล้ว';
+      if (category === 'is-on-plan') return 'ตามแผน';
+      return 'ต่ำกว่าแผน';
+    }
+
+    function countDashboardCategories(indicators) {
+      const counts = { total: indicators.length, completed: 0, onPlan: 0, belowPlan: 0 };
+      indicators.forEach(indicator => {
+        const category = getDashboardCategoryByProgress(indicator.progressValue);
+        if (category === 'is-completed') counts.completed += 1;
+        else if (category === 'is-on-plan') counts.onPlan += 1;
+        else counts.belowPlan += 1;
+      });
+      return counts;
+    }
+
+    function getDashboardSummaryText(counts) {
+      return `เขียว ${counts.completed} • เหลือง ${counts.onPlan} • แดง ${counts.belowPlan}`;
     }
 
     function getStatusText(status) {
@@ -2922,26 +3306,35 @@ function renderAdminIndicatorTable(data) {
       return 'ยังไม่บรรลุผลสำเร็จ';
     }
 
-    function renderOverallSummary(total, completed, progress, pending) {
+    function renderOverallSummary(counts) {
       const overallSummary = document.getElementById('overallSummary');
-      const completedPercent = total === 0 ? 0 : Math.round((completed / total) * 100);
-      const notCompleted = progress + pending;
-      const notCompletedPercent = total === 0 ? 0 : Math.round((notCompleted / total) * 100);
+      const total = counts.total || 0;
+      const belowPlanPercent = total === 0 ? 0 : Math.round((counts.belowPlan / total) * 100);
+      const onPlanPercent = total === 0 ? 0 : Math.round((counts.onPlan / total) * 100);
+      const completedPercent = total === 0 ? 0 : Math.round((counts.completed / total) * 100);
 
       overallSummary.innerHTML = `
-        <div class="summary-kpi completed">
-          <div class="kpi-donut" style="--p:${completedPercent}"><span>${completedPercent}%</span></div>
+        <div class="summary-kpi is-below-plan">
+          <div class="kpi-donut" style="--p:${belowPlanPercent}"><span>${belowPlanPercent}%</span></div>
           <div class="kpi-content">
-            <p class="kpi-label">ตัวชี้วัดบรรลุผลสำเร็จ</p>
-            <div class="kpi-main"><span class="kpi-number">${completed}</span><span class="kpi-unit">ตัวชี้วัด</span></div>
+            <p class="kpi-label">ตัวชี้วัดต่ำกว่าแผน</p>
+            <div class="kpi-main"><span class="kpi-number">${counts.belowPlan}</span><span class="kpi-unit">ตัวชี้วัด</span></div>
             <span class="kpi-percent">จากทั้งหมด ${total} ตัวชี้วัด</span>
           </div>
         </div>
-        <div class="summary-kpi pending">
-          <div class="kpi-donut" style="--p:${notCompletedPercent}"><span>${notCompletedPercent}%</span></div>
+        <div class="summary-kpi is-on-plan">
+          <div class="kpi-donut" style="--p:${onPlanPercent}"><span>${onPlanPercent}%</span></div>
           <div class="kpi-content">
-            <p class="kpi-label">ตัวชี้วัดยังไม่บรรลุผลสำเร็จ</p>
-            <div class="kpi-main"><span class="kpi-number">${notCompleted}</span><span class="kpi-unit">ตัวชี้วัด</span></div>
+            <p class="kpi-label">ตัวชี้วัดเป็นไปตามแผน</p>
+            <div class="kpi-main"><span class="kpi-number">${counts.onPlan}</span><span class="kpi-unit">ตัวชี้วัด</span></div>
+            <span class="kpi-percent">จากทั้งหมด ${total} ตัวชี้วัด</span>
+          </div>
+        </div>
+        <div class="summary-kpi is-completed">
+          <div class="kpi-donut" style="--p:${completedPercent}"><span>${completedPercent}%</span></div>
+          <div class="kpi-content">
+            <p class="kpi-label">ตัวชี้วัดเสร็จสิ้นแล้ว</p>
+            <div class="kpi-main"><span class="kpi-number">${counts.completed}</span><span class="kpi-unit">ตัวชี้วัด</span></div>
             <span class="kpi-percent">จากทั้งหมด ${total} ตัวชี้วัด</span>
           </div>
         </div>
