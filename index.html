@@ -2872,7 +2872,26 @@
         margin-left: 0;
       }
     }
-</style>
+
+    .status-card-empty {
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .status-card-empty h3 { margin: 0; }
+    .status-card-empty-text {
+      margin: 0;
+      color: #6b7280;
+      font-size: 15px;
+      line-height: 1.5;
+      font-weight: 400;
+    }
+
+  </style>
+  <!-- GitHub Pages build: Google Apps Script endpoint configured for approved-dashboard sync -->
 </head>
 <body>
 
@@ -3032,41 +3051,9 @@
 
             <div class="dashboard-grid" id="homepageDashboardGrid">
         <div id="approvedStatusCards" class="approved-status-cards">
-          <div class="status-card" data-default-card="true">
-            <h3>
-              (ร่าง) นโยบายและแผนระดับชาติว่าด้วยการพัฒนาดิจิทัลเพื่อเศรษฐกิจและสังคม<br>
-              (พ.ศ.2561 - 2580)
-            </h3>
-
-            <div class="metric-count">26 ตัวชี้วัด</div>
-
-            <div class="metric-count indicator-count-pill">${stats.total || 0} ตัวชี้วัด</div>
-
-            <div class="progress-label">เสร็จสิ้น</div>
-            <div class="progress-row">
-              <div class="progress-bar">
-                <div class="progress-fill green"></div>
-              </div>
-              <div class="percent green-text">35%</div>
-            </div>
-
-            <div class="progress-label">เป็นไปตามแผน</div>
-            <div class="progress-row">
-              <div class="progress-bar">
-                <div class="progress-fill yellow"></div>
-              </div>
-              <div class="percent yellow-text">45%</div>
-            </div>
-
-            <div class="progress-label">ต่ำกว่าแผน</div>
-            <div class="progress-row">
-              <div class="progress-bar">
-                <div class="progress-fill red"></div>
-              </div>
-              <div class="percent red-text">20%</div>
-            </div>
-
-            <button type="button" class="status-arrow" data-dashboard-id="${item.id}" aria-label="ดูแดชบอร์ดของรายการนี้">→</button>
+          <div class="status-card status-card-empty" data-default-card="true">
+            <h3>กำลังโหลดข้อมูลที่อนุมัติแล้ว</h3>
+            <p class="status-card-empty-text">ข้อมูลจะแสดงจาก Google Sheet เมื่อมีรายการที่ได้รับการอนุมัติ</p>
           </div>
         </div>
 
@@ -3276,6 +3263,7 @@
             remoteId: submissionId,
             source: 'google_sheet',
             submittedAt: sub.submitted_at || sub.submittedAt || sub.timestamp || sub['วันที่ส่งข้อมูล'] || '-',
+            approvalStatus: String(sub.approval_status || sub.approvalStatus || sub['สถานะอนุมัติ'] || 'pending').toLowerCase(),
             planInfo: {
               planName: sub.plan_name || sub.planName || sub['ชื่อแผน'] || '(ร่าง) นโยบายและแผนระดับชาติว่าด้วยการพัฒนาดิจิทัลเพื่อเศรษฐกิจและสังคม (พ.ศ.2561 - 2580)',
               agencyName: sub.agency_name || sub.agencyName || sub['หน่วยงาน'] || 'BDE'
@@ -3344,6 +3332,40 @@
           setList(STORAGE_KEY, pending);
           renderApprovalLists();
         }
+      }
+
+      function loadApprovedFromGoogleSheetForPublic() {
+        if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === 'PASTE_YOUR_WEB_APP_URL_HERE') return;
+
+        const separator = GOOGLE_SCRIPT_URL.includes('?') ? '&' : '?';
+        const publicUrl = GOOGLE_SCRIPT_URL + separator + 'action=publicApproved';
+        loadJsonpFromGoogleSheet(publicUrl, function (data) {
+          const converted = convertGoogleSheetDataToSubmissions(data)
+            .filter(item => String(item.approvalStatus || '').toLowerCase() === 'approved');
+          setList(APPROVED_KEY, converted);
+          if (converted.length && !converted.some(item => String(item.id) === String(localStorage.getItem(ACTIVE_KEY)))) {
+            localStorage.setItem(ACTIVE_KEY, String(converted[0].id));
+          }
+          updateHomeFromApproved();
+          renderApprovalLists();
+        }, function () {
+          // ถ้า Apps Script รุ่นปัจจุบันยังไม่มี action=publicApproved ให้คงข้อมูลใน localStorage ไว้
+          updateHomeFromApproved();
+        });
+      }
+
+      function updateApprovalInGoogleSheet(id, status, onDone) {
+        if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === 'PASTE_YOUR_WEB_APP_URL_HERE') {
+          if (typeof onDone === 'function') onDone(false);
+          return;
+        }
+        const separator = GOOGLE_SCRIPT_URL.includes('?') ? '&' : '?';
+        const url = GOOGLE_SCRIPT_URL + separator + 'action=setApproval&id=' + encodeURIComponent(id) + '&status=' + encodeURIComponent(status);
+        loadJsonpFromGoogleSheet(url, function (result) {
+          if (typeof onDone === 'function') onDone(Boolean(result && result.ok));
+        }, function () {
+          if (typeof onDone === 'function') onDone(false);
+        });
       }
 
       function requestFormSync() {
@@ -3829,10 +3851,29 @@
         const carousel = document.querySelector('.carousel');
         const statusCardsWrap = document.getElementById('approvedStatusCards');
 
-        // ถ้ายังไม่มี approve ให้คง mock/default card เดิมไว้
+        // เมื่อยังไม่มีรายการอนุมัติ ให้แสดง empty state แทน mock HTML
         if (!orderedApproved.length) {
           if (statusCardsWrap) {
             statusCardsWrap.classList.remove('has-multiple');
+            statusCardsWrap.innerHTML = `
+              <div class="status-card status-card-empty" data-default-card="true">
+                <h3>ยังไม่มีข้อมูลที่อนุมัติแล้ว</h3>
+                <p class="status-card-empty-text">กรุณาอนุมัติรายการจากหน้า Admin หรือเชื่อมต่อ Google Sheet เพื่อแสดงข้อมูลบนหน้าแรก</p>
+              </div>
+            `;
+          }
+          if (carousel) {
+            carousel.innerHTML = `
+              <div class="update-card update-card-empty">
+                <div class="update-card-image"></div>
+                <div class="update-card-body">
+                  <div class="update-card-content">
+                    <div class="update-card-title">ยังไม่มีข้อมูลที่อนุมัติแล้ว</div>
+                    <div class="update-card-agency">ข้อมูลจาก Google Sheet จะแสดงหลังจากอนุมัติ</div>
+                  </div>
+                </div>
+              </div>
+            `;
           }
           const totalEl = document.getElementById('overallIndicatorTotal');
           if (totalEl) totalEl.textContent = '0';
@@ -3895,12 +3936,15 @@
         if (!item) return;
 
         pending = pending.filter(row => String(row.id) !== String(id));
-        approved.unshift({ ...item, approvedAt: new Date().toLocaleString('th-TH') });
+        approved.unshift({ ...item, approvalStatus: 'approved', approvedAt: new Date().toLocaleString('th-TH') });
 
         setList(STORAGE_KEY, pending);
         setList(APPROVED_KEY, approved);
         localStorage.setItem(ACTIVE_KEY, String(id));
         renderApprovalLists();
+        updateApprovalInGoogleSheet(id, 'approved', function () {
+          loadApprovedFromGoogleSheetForPublic();
+        });
       }
 
       function rejectItem(id) {
@@ -3916,6 +3960,9 @@
           localStorage.removeItem(ACTIVE_KEY);
         }
         renderApprovalLists();
+        updateApprovalInGoogleSheet(id, 'pending', function () {
+          loadApprovedFromGoogleSheetForPublic();
+        });
       }
 
       function setActiveItem(id) {
@@ -3992,9 +4039,14 @@
         closeDetailDashboard();
       });
 
-      document.addEventListener('DOMContentLoaded', function () { renderApprovalLists(); bindLatestCarouselControls(); });
+      document.addEventListener('DOMContentLoaded', function () {
+        renderApprovalLists();
+        bindLatestCarouselControls();
+        loadApprovedFromGoogleSheetForPublic();
+      });
       renderApprovalLists();
       bindLatestCarouselControls();
+      setTimeout(loadApprovedFromGoogleSheetForPublic, 250);
     })();
   </script>
 
