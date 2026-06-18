@@ -3356,15 +3356,27 @@
 
       function updateApprovalInGoogleSheet(id, status, onDone) {
         if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === 'PASTE_YOUR_WEB_APP_URL_HERE') {
-          if (typeof onDone === 'function') onDone(false);
+          if (typeof onDone === 'function') onDone(false, null);
           return;
         }
+
         const separator = GOOGLE_SCRIPT_URL.includes('?') ? '&' : '?';
-        const url = GOOGLE_SCRIPT_URL + separator + 'action=setApproval&id=' + encodeURIComponent(id) + '&status=' + encodeURIComponent(status);
+        const url = GOOGLE_SCRIPT_URL + separator
+          + 'action=setApproval'
+          + '&id=' + encodeURIComponent(id)
+          + '&status=' + encodeURIComponent(status)
+          + '&_=' + Date.now();
+
         loadJsonpFromGoogleSheet(url, function (result) {
-          if (typeof onDone === 'function') onDone(Boolean(result && result.ok));
+          const returnedStatus = String(result?.approval_status || '').trim().toLowerCase();
+          const saved = Boolean(
+            result
+            && (result.success === true || result.ok === true)
+            && returnedStatus === String(status).trim().toLowerCase()
+          );
+          if (typeof onDone === 'function') onDone(saved, result);
         }, function () {
-          if (typeof onDone === 'function') onDone(false);
+          if (typeof onDone === 'function') onDone(false, null);
         });
       }
 
@@ -3935,15 +3947,19 @@
         const item = pending.find(row => String(row.id) === String(id));
         if (!item) return;
 
-        pending = pending.filter(row => String(row.id) !== String(id));
-        approved.unshift({ ...item, approvalStatus: 'approved', approvedAt: new Date().toLocaleString('th-TH') });
+        updateApprovalInGoogleSheet(id, 'approved', function (saved, result) {
+          if (!saved) {
+            alert('ยังบันทึกสถานะอนุมัติลง Google Sheet ไม่สำเร็จ จึงยังไม่นำรายการขึ้นหน้าแรก\n\nกรุณาตรวจว่า Apps Script ได้ Deploy เวอร์ชันใหม่แล้ว และ URL /exec ใช้งานได้');
+            return;
+          }
 
-        setList(STORAGE_KEY, pending);
-        setList(APPROVED_KEY, approved);
-        localStorage.setItem(ACTIVE_KEY, String(id));
-        renderApprovalLists();
-        updateApprovalInGoogleSheet(id, 'approved', function () {
-          loadApprovedFromGoogleSheetForPublic();
+          pending = pending.filter(row => String(row.id) !== String(id));
+          approved.unshift({ ...item, approvalStatus: 'approved', approvedAt: new Date().toLocaleString('th-TH') });
+          setList(STORAGE_KEY, pending);
+          setList(APPROVED_KEY, approved);
+          localStorage.setItem(ACTIVE_KEY, String(id));
+          renderApprovalLists();
+          setTimeout(loadApprovedFromGoogleSheetForPublic, 350);
         });
       }
 
@@ -3954,14 +3970,19 @@
       }
 
       function unapproveItem(id) {
-        const approved = getList(APPROVED_KEY).filter(row => String(row.id) !== String(id));
-        setList(APPROVED_KEY, approved);
-        if (String(localStorage.getItem(ACTIVE_KEY)) === String(id)) {
-          localStorage.removeItem(ACTIVE_KEY);
-        }
-        renderApprovalLists();
-        updateApprovalInGoogleSheet(id, 'pending', function () {
-          loadApprovedFromGoogleSheetForPublic();
+        updateApprovalInGoogleSheet(id, 'pending', function (saved) {
+          if (!saved) {
+            alert('ยังยกเลิกอนุมัติใน Google Sheet ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง');
+            return;
+          }
+
+          const approved = getList(APPROVED_KEY).filter(row => String(row.id) !== String(id));
+          setList(APPROVED_KEY, approved);
+          if (String(localStorage.getItem(ACTIVE_KEY)) === String(id)) {
+            localStorage.removeItem(ACTIVE_KEY);
+          }
+          renderApprovalLists();
+          setTimeout(loadApprovedFromGoogleSheetForPublic, 350);
         });
       }
 
