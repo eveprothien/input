@@ -2890,6 +2890,100 @@
       font-weight: 400;
     }
 
+
+
+    /* === MOBILE ONLY: RESPONSIVE TUNING (desktop remains unchanged) === */
+    @media (max-width: 768px) {
+      html { -webkit-text-size-adjust: 100%; }
+      body { overflow-x: hidden !important; }
+
+      .container { width: min(100% - 28px, 1280px) !important; }
+
+      .status-card.approved-home-card {
+        padding: 24px 20px 22px !important;
+        min-height: 0 !important;
+      }
+      .status-card.approved-home-card h3 {
+        max-width: 100% !important;
+        margin: 0 0 14px !important;
+        font-size: 21px !important;
+        line-height: 1.28 !important;
+      }
+      .status-card.approved-home-card .status-arrow {
+        position: static !important;
+        min-width: 0 !important;
+        height: 38px !important;
+        padding: 0 14px !important;
+        margin: 0 0 16px !important;
+        font-size: 14px !important;
+        border-radius: 12px !important;
+      }
+      .status-card.approved-home-card .status-arrow span {
+        font-size: 17px !important;
+      }
+      .status-card.approved-home-card .indicator-count-pill {
+        margin: 0 0 18px !important;
+        padding: 8px 13px !important;
+        font-size: 15px !important;
+      }
+      .status-card.approved-home-card .indicator-count-pill::before {
+        width: 7px !important;
+        height: 7px !important;
+        margin-right: 7px !important;
+      }
+      .status-card .progress-label,
+      .status-card .progress-name {
+        font-size: 16px !important;
+      }
+      .status-card .progress-meta,
+      .status-card .progress-percent {
+        font-size: 14px !important;
+      }
+      .status-card .progress-bar { height: 13px !important; }
+
+      .detail-dashboard-section { padding: 14px !important; }
+      .detail-dashboard-shell { width: 100% !important; }
+      .detail-dashboard-toolbar { margin-bottom: 12px !important; }
+      .detail-back-btn {
+        padding: 10px 14px !important;
+        border-radius: 12px !important;
+        font-size: 14px !important;
+      }
+      .detail-dashboard-content { gap: 14px !important; padding-bottom: 16px !important; }
+      .detail-hero-card { padding: 20px 18px !important; border-radius: 22px !important; }
+      .detail-plan-title { font-size: 22px !important; line-height: 1.28 !important; }
+      .detail-plan-meta { gap: 8px !important; font-size: 13px !important; }
+      .detail-summary-panel { padding: 14px !important; }
+      .detail-summary-panel-title { font-size: 15px !important; }
+      .detail-pie-visual { width: 100px !important; height: 100px !important; }
+      .detail-pie-visual::before { width: 68px !important; height: 68px !important; }
+      .detail-pie-total { font-size: 24px !important; }
+
+      .detail-original-dashboard-card { padding: 14px !important; border-radius: 20px !important; }
+      .detail-original-dashboard-head { margin-bottom: 12px !important; }
+      .detail-original-dashboard-title { font-size: 21px !important; line-height: 1.3 !important; }
+      .detail-original-dashboard-frame {
+        min-height: 2100px !important;
+        border-radius: 16px !important;
+      }
+
+      .update-card.approved-update-card.approved-update-card-simple {
+        min-width: calc(100vw - 28px) !important;
+        max-width: calc(100vw - 28px) !important;
+        height: 172px !important;
+      }
+      .update-card.approved-update-card.approved-update-card-simple .update-card-title {
+        font-size: 16px !important;
+      }
+      .update-card.approved-update-card.approved-update-card-simple .update-card-agency {
+        font-size: 12px !important;
+      }
+      .update-card.approved-update-card.approved-update-card-simple .update-detail-btn {
+        padding: 9px 13px !important;
+        font-size: 13px !important;
+      }
+    }
+
   </style>
   <!-- GitHub Pages build: Google Apps Script endpoint configured for approved-dashboard sync -->
 </head>
@@ -4319,6 +4413,94 @@ PCFET0NUWVBFIGh0bWw+CjxodG1sIGxhbmc9InRoIj4KPGhlYWQ+CiAgPG1ldGEgY2hhcnNldD0iVVRG
             .dashboard-grid {
               width: 100% !important;
             }
+
+            @media (max-width: 768px) {
+              html { -webkit-text-size-adjust: 100%; }
+              body { font-size: 14px !important; overflow-x: hidden !important; }
+              #result { padding: 16px 14px 28px !important; }
+              .result-section-title,
+              #strategyKpiTitle,
+              #strategyDetailTitle {
+                font-size: 20px !important;
+                line-height: 1.3 !important;
+                margin-top: 14px !important;
+                margin-bottom: 12px !important;
+              }
+              #overallTargetDashboard,
+              .overall-target-dashboard {
+                padding: 14px !important;
+                border-radius: 18px !important;
+                margin-bottom: 20px !important;
+              }
+              .overall-target-title { font-size: 17px !important; }
+              .overall-target-grid,
+              .overall-summary,
+              .summary-kpi-grid,
+              .project-strategy-dashboard-grid,
+              .detail-overall-target-grid,
+              .dashboard-grid,
+              .strategy-row {
+                grid-template-columns: 1fr !important;
+              }
+              .strategy-row { gap: 14px !important; margin-bottom: 14px !important; }
+              .summary-card,
+              .summary-card.indicator-detail-card,
+              .project-strategy-card {
+                min-height: 0 !important;
+                padding: 16px !important;
+                border-radius: 18px !important;
+              }
+              .indicator-detail-card .strategy-no,
+              .project-strategy-no { font-size: 15px !important; }
+              .indicator-detail-card .strategy-theme,
+              .project-strategy-theme {
+                font-size: 12px !important;
+                padding: 6px 10px !important;
+              }
+              .indicator-detail-card .strategy-desc,
+              .project-strategy-desc {
+                font-size: 13px !important;
+                line-height: 1.45 !important;
+                margin-bottom: 12px !important;
+              }
+              .indicator-detail-row {
+                grid-template-columns: 34px minmax(0, 1fr) !important;
+                gap: 8px !important;
+                min-height: 0 !important;
+                padding: 10px !important;
+                border-radius: 12px !important;
+              }
+              .indicator-detail-no {
+                width: 32px !important;
+                height: 32px !important;
+                border-radius: 9px !important;
+                font-size: 13px !important;
+              }
+              .indicator-detail-name {
+                font-size: 13px !important;
+                line-height: 1.35 !important;
+                -webkit-line-clamp: 3 !important;
+              }
+              .indicator-detail-value,
+              .indicator-detail-status {
+                grid-column: 2 / 3 !important;
+                justify-self: start !important;
+                font-size: 12px !important;
+                padding: 6px 10px !important;
+              }
+              .strategy-progress-summary {
+                margin-bottom: 12px !important;
+                padding: 7px 10px !important;
+                font-size: 12px !important;
+              }
+              .strategy-progress-summary strong { font-size: 15px !important; }
+              .project-strategy-card-head,
+              .project-strategy-card-body { padding: 14px !important; }
+              .project-summary-meta,
+              .project-list-item-name { font-size: 12px !important; }
+              .project-donut { width: 86px !important; height: 86px !important; }
+              .project-donut span { font-size: 18px !important; }
+            }
           </style>
           <script>
             (function () {
@@ -4525,7 +4707,22 @@ PCFET0NUWVBFIGh0bWw+CjxodG1sIGxhbmc9InRoIj4KPGhlYWQ+CiAgPG1ldGEgY2hhcnNldD0iVVRG
         `;
 
         const frame = document.getElementById('oldDashboardFrame');
-        if (frame) frame.srcdoc = frameDoc;
+        if (frame) {
+          frame.srcdoc = frameDoc;
+          if (window.matchMedia && window.matchMedia('(max-width: 768px)').matches) {
+            frame.addEventListener('load', function resizeMobileDashboardFrame() {
+              try {
+                const doc = frame.contentDocument;
+                const height = Math.max(
+                  doc && doc.body ? doc.body.scrollHeight : 0,
+                  doc && doc.documentElement ? doc.documentElement.scrollHeight : 0,
+                  2100
+                );
+                frame.style.height = Math.min(Math.max(height + 24, 2100), 9000) + 'px';
+              } catch (error) {}
+            }, { once: true });
+          }
+        }
 
         section.hidden = false;
         document.body.classList.add('detail-dashboard-open');
