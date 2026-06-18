@@ -3151,12 +3151,7 @@
           </div>
         </div>
 
-        <div class="add-card">
-          <div class="add-card-inner">
-            <div class="plus-circle">+</div>
-            <div class="add-card-text">เพิ่มนโยบายหรือแผน</div>
-          </div>
-        </div>
+
       </div>
     </div>
   </section>
@@ -4500,6 +4495,47 @@ PCFET0NUWVBFIGh0bWw+CjxodG1sIGxhbmc9InRoIj4KPGhlYWQ+CiAgPG1ldGEgY2hhcnNldD0iVVRG
               .project-list-item-name { font-size: 12px !important; }
               .project-donut { width: 86px !important; height: 86px !important; }
               .project-donut span { font-size: 18px !important; }
+
+              /* Mobile dashboard indicator: keep the full title in a wide content column. */
+              .indicator-detail-row {
+                grid-template-columns: 42px minmax(0, 1fr) !important;
+                grid-template-areas:
+                  "number name"
+                  "number status"
+                  "number value" !important;
+                align-items: start !important;
+                gap: 9px 10px !important;
+                padding: 12px !important;
+              }
+              .indicator-detail-no {
+                grid-area: number !important;
+                margin-top: 1px !important;
+              }
+              .indicator-detail-name {
+                grid-area: name !important;
+                width: 100% !important;
+                min-width: 0 !important;
+                display: block !important;
+                overflow: visible !important;
+                white-space: normal !important;
+                -webkit-line-clamp: unset !important;
+                -webkit-box-orient: initial !important;
+                font-size: 14px !important;
+                line-height: 1.42 !important;
+                overflow-wrap: anywhere !important;
+              }
+              .indicator-detail-status {
+                grid-area: status !important;
+                grid-column: auto !important;
+                grid-row: auto !important;
+                justify-self: start !important;
+              }
+              .indicator-detail-value {
+                grid-area: value !important;
+                grid-column: auto !important;
+                grid-row: auto !important;
+                justify-self: start !important;
+              }
             }
           </style>
           <script>
