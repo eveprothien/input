@@ -30,7 +30,7 @@
     }
 
     .hero {
-      min-height: 500px;
+      min-height: 360px;
       position: relative;
       overflow: hidden;
       background:
@@ -40,7 +40,7 @@
       background-size: cover;
       background-position: left center;
       background-repeat: no-repeat;
-      padding: 26px 0 42px;
+      padding: 14px 0 20px;
     }
 
     .hero::after {
@@ -63,7 +63,7 @@
     }
 
     .logo-img {
-      width: 210px;
+      width: 148px;
       max-width: 100%;
       height: auto;
       display: block;
@@ -74,25 +74,25 @@
       z-index: 2;
       display: flex;
       justify-content: flex-end;
-      margin-top: 28px;
+      margin-top: 12px;
     }
 
     .hero-card {
-      width: min(720px, 58%);
+      width: min(590px, 52%);
       background: rgba(3, 7, 17, 0.78);
       border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 34px;
-      padding: 50px 56px;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+      border-radius: 24px;
+      padding: 28px 34px;
+      box-shadow: 0 20px 46px rgba(0,0,0,0.32);
       backdrop-filter: blur(5px);
     }
 
     .hero-title {
       color: #fff;
-      font-size: 34px;
+      font-size: 27px;
       font-weight: 800;
-      line-height: 1.28;
-      margin-bottom: 28px;
+      line-height: 1.24;
+      margin-bottom: 18px;
       text-wrap: balance;
     }
 
@@ -104,10 +104,10 @@
       background: linear-gradient(180deg, #89d841 0%, #68bc35 100%);
       color: #ffffff;
       text-decoration: none;
-      border-radius: 16px;
-      padding: 15px 28px;
+      border-radius: 14px;
+      padding: 11px 20px;
       font-family: inherit;
-      font-size: 18px;
+      font-size: 15px;
       font-weight: 600;
       line-height: 1.2;
       box-shadow: 0 12px 28px rgba(102, 190, 53, 0.28);
@@ -635,25 +635,48 @@
        อนุมัติข้อมูลก่อนนำขึ้นแสดงหน้าแรก
     ========================= */
     .approval-section {
-      background: #ffffff;
-      padding: 42px 0 56px;
+      background: linear-gradient(180deg, #f6faf7 0%, #f8fbf9 100%);
+      padding: 52px 0 64px;
       border-top: 1px solid #e3ebe6;
+      border-bottom: 1px solid #edf3ee;
     }
 
     .approval-panel {
       background: #ffffff;
-      border: 1px solid #dfe8e3;
+      border: 1px solid #d9e4dd;
       border-radius: 26px;
       padding: 24px;
-      box-shadow: 0 18px 46px rgba(24, 54, 35, 0.10);
+      box-shadow: 0 14px 32px rgba(24, 54, 35, 0.08);
     }
 
     .approval-head {
       display: flex;
       justify-content: space-between;
-      gap: 18px;
+      gap: 30px;
       align-items: flex-start;
-      margin-bottom: 18px;
+      margin-bottom: 20px;
+    }
+
+    .approval-head > div:first-child {
+      min-width: 0;
+      flex: 1 1 auto;
+      max-width: 760px;
+    }
+
+    .approval-login-cta {
+      flex: 0 0 220px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-start;
+      padding-top: 34px;
+    }
+
+    .approval-login-cta #approvalLoginBtn {
+      width: 100%;
+      min-height: 52px;
+      margin: 0;
+      font-size: 16px;
+      border-radius: 15px;
     }
 
     .approval-kicker {
@@ -663,25 +686,25 @@
       background: #eaf6e7;
       border: 1px solid #cbe7c4;
       border-radius: 999px;
-      padding: 6px 12px;
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 10px;
+      padding: 5px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 8px;
     }
 
     .approval-title {
       margin: 0;
-      font-size: 28px;
-      line-height: 1.25;
-      font-weight: 800;
-      color: #111827;
+      font-size: 22px;
+      line-height: 1.3;
+      font-weight: 700;
+      color: #172033;
     }
 
     .approval-desc {
-      margin: 8px 0 0;
-      color: #617168;
-      font-size: 15px;
-      line-height: 1.6;
+      margin: 6px 0 0;
+      color: #66756d;
+      font-size: 14px;
+      line-height: 1.55;
       max-width: 780px;
     }
 
@@ -710,6 +733,55 @@
     .approval-login-card input:focus {
       border-color: #43b02a;
       box-shadow: 0 0 0 3px rgba(67,176,42,0.12);
+    }
+
+    .approval-login-card {
+      display: grid;
+      grid-template-columns: minmax(190px, 240px) minmax(190px, 240px) minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+    }
+
+    .approval-login-card #approvalLoginMsg {
+      grid-column: 1 / -1;
+      min-height: 0;
+    }
+
+    @media (max-width: 900px) {
+      .approval-head {
+        gap: 18px;
+      }
+
+      .approval-login-cta {
+        flex-basis: 180px;
+        padding-top: 28px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .approval-head {
+        display: block;
+        margin-bottom: 16px;
+      }
+
+      .approval-login-cta {
+        display: block;
+        padding-top: 14px;
+      }
+
+      .approval-login-cta #approvalLoginBtn {
+        width: auto;
+        min-width: 150px;
+      }
+
+      .approval-login-card {
+        grid-template-columns: 1fr;
+      }
+
+      .approval-login-card input {
+        min-width: 0;
+        width: 100%;
+      }
     }
 
     .approval-admin-area {
@@ -3082,7 +3154,279 @@
       }
     }
 
-  </style>
+  
+
+    /* === HOME STATUS CARDS: 3 CARDS PER ROW ON DESKTOP === */
+    @media (min-width: 1121px) {
+      .approved-status-cards.has-multiple {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 20px !important;
+      }
+
+      .status-card.approved-home-card {
+        min-height: 280px !important;
+        padding: 24px 22px 22px !important;
+      }
+
+      .status-card.approved-home-card h3 {
+        max-width: calc(100% - 52px) !important;
+        margin-bottom: 10px !important;
+        font-size: 18px !important;
+        line-height: 1.32 !important;
+        -webkit-line-clamp: 3 !important;
+      }
+
+      .status-card.approved-home-card .approved-card-meta {
+        margin-bottom: 12px !important;
+        font-size: 12px !important;
+        line-height: 1.45 !important;
+      }
+
+      .status-card.approved-home-card .metric-count,
+      .status-card.approved-home-card .indicator-count-pill {
+        margin-bottom: 12px !important;
+        padding: 8px 11px !important;
+        border-radius: 12px !important;
+        font-size: 15px !important;
+      }
+
+      .status-card.approved-home-card .progress-label {
+        margin-top: 10px !important;
+        margin-bottom: 6px !important;
+        font-size: 14px !important;
+      }
+
+      .status-card.approved-home-card .progress-row {
+        grid-template-columns: minmax(0, 1fr) 40px !important;
+        gap: 8px !important;
+        margin-bottom: 6px !important;
+      }
+
+      .status-card.approved-home-card .progress-bar {
+        height: 13px !important;
+      }
+
+      .status-card.approved-home-card .percent {
+        font-size: 14px !important;
+      }
+
+      .status-card.approved-home-card .status-arrow {
+        top: 18px !important;
+        right: 18px !important;
+        width: 34px !important;
+        height: 34px !important;
+        font-size: 20px !important;
+      }
+    }
+
+    @media (min-width: 769px) and (max-width: 1120px) {
+      .approved-status-cards.has-multiple {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      }
+    }
+
+
+
+    /* =========================================================
+       HOME DASHBOARD STATUS CARDS — FINAL DESKTOP LAYOUT FIX
+       3 cards per row, compact card size, no button/title overlap
+    ========================================================= */
+    #homepageDashboardGrid {
+      display: block !important;
+    }
+
+    #approvedStatusCards {
+      width: 100% !important;
+      display: grid !important;
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      grid-column: 1 / -1 !important;
+      gap: 20px !important;
+      align-items: stretch !important;
+    }
+
+    #approvedStatusCards.has-multiple {
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    }
+
+    #approvedStatusCards .status-card.approved-home-card {
+      min-width: 0 !important;
+      min-height: 330px !important;
+      height: 100% !important;
+      padding: 22px 22px 66px !important;
+      border-radius: 20px !important;
+      overflow: hidden !important;
+      box-shadow: 0 10px 24px rgba(16, 24, 40, 0.08) !important;
+    }
+
+    #approvedStatusCards .status-card.approved-home-card h3 {
+      max-width: 100% !important;
+      min-height: 68px !important;
+      margin: 0 0 9px !important;
+      font-size: 18px !important;
+      line-height: 1.36 !important;
+      -webkit-line-clamp: 3 !important;
+    }
+
+    #approvedStatusCards .status-card.approved-home-card .approved-card-meta {
+      min-height: 38px !important;
+      margin: 0 0 10px !important;
+      font-size: 12px !important;
+      line-height: 1.45 !important;
+    }
+
+    #approvedStatusCards .status-card.approved-home-card .indicator-count-pill,
+    #approvedStatusCards .status-card.approved-home-card .metric-count {
+      width: fit-content !important;
+      margin: 0 0 12px !important;
+      padding: 7px 10px !important;
+      border-radius: 12px !important;
+      font-size: 14px !important;
+      line-height: 1.2 !important;
+    }
+
+    #approvedStatusCards .status-card.approved-home-card .progress-label {
+      margin: 8px 0 4px !important;
+      font-size: 13px !important;
+      line-height: 1.2 !important;
+    }
+
+    #approvedStatusCards .status-card.approved-home-card .progress-row {
+      grid-template-columns: minmax(0, 1fr) 38px !important;
+      gap: 8px !important;
+      margin: 0 !important;
+    }
+
+    #approvedStatusCards .status-card.approved-home-card .progress-bar {
+      height: 10px !important;
+    }
+
+    #approvedStatusCards .status-card.approved-home-card .percent {
+      width: 38px !important;
+      min-width: 38px !important;
+      font-size: 13px !important;
+      line-height: 1 !important;
+    }
+
+    #approvedStatusCards .status-card.approved-home-card .status-arrow {
+      top: auto !important;
+      left: auto !important;
+      right: 18px !important;
+      bottom: 16px !important;
+      width: auto !important;
+      min-width: 0 !important;
+      height: 34px !important;
+      padding: 0 12px !important;
+      border-radius: 10px !important;
+      font-size: 13px !important;
+      line-height: 1 !important;
+      white-space: nowrap !important;
+    }
+
+    #approvedStatusCards .status-card.approved-home-card .status-arrow span {
+      margin-left: 5px !important;
+      font-size: 18px !important;
+      line-height: 1 !important;
+    }
+
+    @media (min-width: 769px) and (max-width: 1120px) {
+      #approvedStatusCards,
+      #approvedStatusCards.has-multiple {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      #approvedStatusCards,
+      #approvedStatusCards.has-multiple {
+        grid-template-columns: 1fr !important;
+      }
+    }
+
+  
+    /* ADMIN LOGIN: compact group on the right (desktop only) */
+    .approval-head {
+      align-items: center;
+      gap: 28px;
+    }
+
+    .approval-copy {
+      min-width: 0;
+      flex: 1 1 auto;
+      max-width: 720px;
+    }
+
+    #approvalLoginBox.approval-login-cta {
+      flex: 0 0 auto;
+      width: auto;
+      min-width: 0;
+      margin: 0 0 0 auto;
+      padding: 10px;
+      display: grid;
+      grid-template-columns: 148px 148px auto;
+      gap: 8px;
+      align-items: center;
+      border: 1px solid #dfe8e3;
+      border-radius: 15px;
+      background: #fbfdfb;
+      box-shadow: none;
+    }
+
+    #approvalLoginBox.approval-login-cta input {
+      width: 148px;
+      min-width: 0;
+      height: 40px;
+      padding: 8px 11px;
+      font-size: 13px;
+      border-radius: 10px;
+    }
+
+    #approvalLoginBox.approval-login-cta #approvalLoginBtn {
+      width: auto;
+      min-width: 108px;
+      min-height: 40px;
+      height: 40px;
+      margin: 0;
+      padding: 8px 14px;
+      font-size: 13px;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+
+    #approvalLoginBox.approval-login-cta #approvalLoginMsg {
+      grid-column: 1 / -1;
+      min-height: 0;
+      font-size: 12px !important;
+      line-height: 1.35;
+    }
+
+    @media (max-width: 900px) {
+      #approvalLoginBox.approval-login-cta {
+        grid-template-columns: 132px 132px auto;
+      }
+
+      #approvalLoginBox.approval-login-cta input {
+        width: 132px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .approval-head {
+        display: block;
+      }
+
+      #approvalLoginBox.approval-login-cta {
+        width: 100%;
+        margin: 16px 0 0;
+        grid-template-columns: 1fr;
+        padding: 12px;
+      }
+
+      #approvalLoginBox.approval-login-cta input,
+      #approvalLoginBox.approval-login-cta #approvalLoginBtn {
+        width: 100%;
+      }
+    }
+</style>
   <!-- GitHub Pages build: Google Apps Script endpoint configured for approved-dashboard sync -->
 </head>
 <body>
@@ -3133,25 +3477,59 @@
   </section>
 
 
+  
+
+  
+
+  <section class="dashboard-section" id="dashboard">
+    <div class="container">
+      <div class="dashboard-title">สถานะการดำเนินงานของนโยบายและแผนด้านดิจิทัลประเทศไทย</div>
+      <div class="title-underline"></div>
+
+            <div class="dashboard-grid" id="homepageDashboardGrid">
+        <div id="approvedStatusCards" class="approved-status-cards">
+          <div class="status-card status-card-empty" data-default-card="true">
+            <h3>กำลังโหลดข้อมูลที่อนุมัติแล้ว</h3>
+            <p class="status-card-empty-text">ข้อมูลจะแสดงจาก Google Sheet เมื่อมีรายการที่ได้รับการอนุมัติ</p>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </section>
+
+
+
+  <section id="detailDashboardSection" class="detail-dashboard-section" hidden>
+    <div class="detail-dashboard-shell">
+      <div class="detail-dashboard-toolbar">
+        <button type="button" id="detailBackBtn" class="detail-back-btn">← กลับไปหน้าหลัก</button>
+      </div>
+      <div id="detailDashboardContent" class="detail-dashboard-content"></div>
+    </div>
+  </section>
+
+  
+
   <section id="admin-approval-section" class="approval-section">
     <div class="container">
       <div class="approval-panel">
         <div class="approval-head">
-          <div>
+          <div class="approval-copy">
             <div class="approval-kicker">Admin Approval</div>
             <h2 class="approval-title">อนุมัติชุดข้อมูลก่อนนำขึ้นแสดงหน้าเว็บไซต์</h2>
             <p class="approval-desc">
               หลังจากกรอกฟอร์มและกด Submit ระบบจะส่งชุดข้อมูลเพื่อขออนุมัติ เพื่อนำไปแสดงใน “อัพเดทล่าสุด” และ “สถานะการดำเนินงาน” บนหน้าแรก
             </p>
           </div>
-          
-        </div>
 
-        <div id="approvalLoginBox" class="approval-login-card">
-          <input id="approvalUsername" type="text" placeholder="Username">
-          <input id="approvalPassword" type="password" placeholder="Password">
-          <button id="approvalLoginBtn" type="button" class="btn-dark">เข้าสู่ระบบ</button>
-          <span id="approvalLoginMsg" style="color:#b42318;font-size:13px;font-weight:700;"></span>
+          <div id="approvalLoginBox" class="approval-login-card approval-login-cta">
+            <input id="approvalUsername" type="text" placeholder="Username">
+            <input id="approvalPassword" type="password" placeholder="Password">
+            <button id="approvalLoginBtn" type="button" class="btn-dark">เข้าสู่ระบบ</button>
+            <span id="approvalLoginMsg" style="color:#b42318;font-size:13px;font-weight:700;"></span>
+          </div>
         </div>
 
         <div id="approvalAdminArea" class="approval-admin-area">
@@ -3186,82 +3564,6 @@
           </div>
         </div>
       </div>
-    </div>
-  </section>
-
-  <section class="latest-section">
-    <div class="container">
-      <div class="section-head">
-        <div class="section-title">อัพเดทล่าสุด</div>
-        <a href="#" class="view-all">
-          ดูทั้งหมด
-          <span class="view-all-circle">›</span>
-        </a>
-      </div>
-
-      <div class="carousel">
-        <div class="update-card">
-          <div class="update-card-image"></div>
-          <div class="update-card-body">
-            <div class="update-card-content">
-              <div class="update-card-title">
-                นโยบายและแผน DE
-              </div>
-              <div class="update-card-agency">หน่วยงาน: สดช.</div>
-            </div>
-
-            <div class="update-card-action">
-              <a href="#" class="btn-green">
-                ดูรายละเอียด
-                <span>›</span>
-              </a>
-            </div>
-          </div>
-        </div></div>
-
-      </div>
-
-      <div class="latest-carousel-nav">
-        <button type="button" class="carousel-arrow" id="latestPrevBtn" aria-label="Previous">‹</button>
-        <div class="dots">
-          <div class="dot active"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
-        </div>
-        <button type="button" class="carousel-arrow" id="latestNextBtn" aria-label="Next">›</button>
-      </div>
-    </div>
-  </section>
-
-  <section class="dashboard-section" id="dashboard">
-    <div class="container">
-      <div class="dashboard-title">สถานะการดำเนินงานของนโยบายและแผนด้านดิจิทัลประเทศไทย</div>
-      <div class="title-underline"></div>
-
-            <div class="dashboard-grid" id="homepageDashboardGrid">
-        <div id="approvedStatusCards" class="approved-status-cards">
-          <div class="status-card status-card-empty" data-default-card="true">
-            <h3>กำลังโหลดข้อมูลที่อนุมัติแล้ว</h3>
-            <p class="status-card-empty-text">ข้อมูลจะแสดงจาก Google Sheet เมื่อมีรายการที่ได้รับการอนุมัติ</p>
-          </div>
-        </div>
-
-
-      </div>
-    </div>
-  </section>
-
-
-
-  <section id="detailDashboardSection" class="detail-dashboard-section" hidden>
-    <div class="detail-dashboard-shell">
-      <div class="detail-dashboard-toolbar">
-        <button type="button" id="detailBackBtn" class="detail-back-btn">← กลับไปหน้าหลัก</button>
-      </div>
-      <div id="detailDashboardContent" class="detail-dashboard-content"></div>
     </div>
   </section>
 
