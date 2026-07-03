@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BDE Digital Policy Dashboard</title>
+  <title>BDE Digital Policy Dashboard - V4 REBUILD</title>
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap');
@@ -3951,6 +3951,93 @@
       font-family: 'Kanit', Arial, sans-serif !important;
     }
 
+
+    /* AFTER LOGIN: show only compact user bar + input form */
+    .input-login-stage.is-after-login {
+      display: none !important;
+    }
+
+    .input-user-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin: 0 0 14px;
+      padding: 12px 16px;
+      background: #f6fbf5;
+      border: 1px solid #cfe8c8;
+      border-radius: 16px;
+      box-shadow: none !important;
+    }
+
+    .input-user-topbar[hidden] {
+      display: none !important;
+    }
+
+    .input-user-topbar-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      color: #155d12;
+      font-size: 14px;
+      line-height: 1.4;
+      font-weight: 500;
+      font-family: 'Kanit', Arial, sans-serif;
+    }
+
+    .input-user-topbar-dot {
+      width: 10px;
+      height: 10px;
+      flex: 0 0 10px;
+      border-radius: 999px;
+      background: #43b02a;
+    }
+
+    .input-topbar-logout-btn {
+      min-height: 38px;
+      padding: 8px 14px;
+      border-radius: 12px;
+      border: 1px solid #f1c7c7;
+      background: #fff7f7;
+      color: #b42318;
+      font-size: 13px;
+      line-height: 1;
+      font-weight: 500;
+      font-family: 'Kanit', Arial, sans-serif;
+      cursor: pointer;
+      box-shadow: none !important;
+    }
+
+    .input-topbar-logout-btn:hover {
+      background: #fff0f0;
+      box-shadow: none !important;
+      transform: none !important;
+    }
+
+    @media (max-width: 768px) {
+      .input-user-topbar {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .input-topbar-logout-btn {
+        width: 100%;
+      }
+    }
+
+
+    #bdeLoginBridgeFrame {
+      width: 0 !important;
+      height: 0 !important;
+      border: 0 !important;
+      position: absolute !important;
+      left: -9999px !important;
+      top: -9999px !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+
 </style>
   <!-- GitHub Pages build: Google Apps Script endpoint configured for approved-dashboard sync -->
 </head>
@@ -4031,6 +4118,16 @@
           </div>
         </div>
       </div>
+
+      <div id="inputUserTopbar" class="input-user-topbar" hidden>
+        <div class="input-user-topbar-status">
+          <span class="input-user-topbar-dot"></span>
+          <span id="inputUserTopbarText">ผู้ใช้งาน</span>
+        </div>
+        <button id="inputTopbarLogoutBtn" type="button" class="input-topbar-logout-btn">ออกจากระบบ</button>
+      </div>
+
+      <iframe id="bdeLoginBridgeFrame" title="BDE Login Bridge" hidden></iframe>
 
       <div id="inputFrameCard" class="input-frame-card" hidden>
         <div class="input-frame-toolbar">
@@ -4139,6 +4236,11 @@
       const iframe = document.getElementById('bdeInputFrame');
       const fullBtn = document.getElementById('openFormFullBtn');
       const b64Node = document.getElementById('bdeFormBase64');
+      const loginStage = document.querySelector('.input-login-stage');
+      const inputUserTopbar = document.getElementById('inputUserTopbar');
+      const inputUserTopbarText = document.getElementById('inputUserTopbarText');
+      const inputTopbarLogoutBtn = document.getElementById('inputTopbarLogoutBtn');
+      const loginBridgeFrame = document.getElementById('bdeLoginBridgeFrame');
       const loginCard = document.getElementById('inputUserLoginCard');
       const loginForm = document.getElementById('inputUserLoginForm');
       const loggedInActions = document.getElementById('inputLoggedInActions');
@@ -4150,6 +4252,8 @@
       const currentUserMsg = document.getElementById('inputCurrentUserMsg');
       const frameCard = document.getElementById('inputFrameCard');
       const INPUT_USER_KEY = 'bdeInputCurrentUser';
+      const INPUT_USER_VERSION_KEY = 'bdeInputLoginVersion';
+      const INPUT_USER_VERSION = '20260703_v4_rebuild';
       const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyODfluTtTDSTLnBUAFEutsoARzNZD68SAFLeKvV_9c7VMsKHTlBIJirf7yFnAeH3cR/exec';
 
       function decodeBase64Utf8(base64Text) {
@@ -4163,28 +4267,67 @@
 
       function readCurrentUser() {
         try {
-          return JSON.parse(localStorage.getItem(INPUT_USER_KEY) || 'null');
+          const version = localStorage.getItem(INPUT_USER_VERSION_KEY);
+          const user = JSON.parse(localStorage.getItem(INPUT_USER_KEY) || 'null');
+
+          if (!user || !user.username) return null;
+
+          // ป้องกัน browser เดิมจำค่า login เก่าจากไฟล์/logic คนละเวอร์ชัน
+          // ถ้าเป็นค่าเก่า ให้หน้าเว็บเคลียร์เฉพาะ session ของระบบนี้เอง ไม่ต้องให้ผู้ใช้ clear browser
+          if (version !== INPUT_USER_VERSION) {
+            localStorage.removeItem(INPUT_USER_KEY);
+            localStorage.setItem(INPUT_USER_VERSION_KEY, INPUT_USER_VERSION);
+            return null;
+          }
+
+          return user;
         } catch (error) {
+          localStorage.removeItem(INPUT_USER_KEY);
+          localStorage.setItem(INPUT_USER_VERSION_KEY, INPUT_USER_VERSION);
           return null;
         }
       }
 
       function writeCurrentUser(user) {
-        if (user) {
+        localStorage.setItem(INPUT_USER_VERSION_KEY, INPUT_USER_VERSION);
+        if (user && user.username) {
           localStorage.setItem(INPUT_USER_KEY, JSON.stringify(user));
         } else {
           localStorage.removeItem(INPUT_USER_KEY);
         }
       }
 
+      function resetInputLoginRuntime() {
+        writeCurrentUser(null);
+        if (iframe) {
+          iframe.srcdoc = '';
+          iframe.removeAttribute('data-loaded');
+        }
+        if (frameCard) frameCard.hidden = true;
+        if (inputUserTopbar) inputUserTopbar.hidden = true;
+      }
+
       function setLoginState(user) {
         const isLoggedIn = !!(user && user.username);
+        const agencyName = isLoggedIn ? (user.agencyName || user.agency_name || '-') : '';
+
+        if (loginStage) {
+          loginStage.classList.toggle('is-after-login', isLoggedIn);
+          loginStage.hidden = isLoggedIn;
+        }
+        if (inputUserTopbar) inputUserTopbar.hidden = !isLoggedIn;
+        if (inputUserTopbarText) {
+          inputUserTopbarText.textContent = isLoggedIn
+            ? `ผู้ใช้งาน: ${user.username} (${agencyName})`
+            : 'ผู้ใช้งาน';
+        }
+
         if (loginCard) loginCard.classList.toggle('is-logged-in', isLoggedIn);
         if (loginForm) loginForm.hidden = isLoggedIn;
         if (loggedInActions) loggedInActions.hidden = !isLoggedIn;
         if (currentUserMsg) {
           currentUserMsg.hidden = !isLoggedIn;
-          currentUserMsg.textContent = isLoggedIn ? `เข้าสู่ระบบแล้ว: ${user.username} (${user.agencyName || user.agency_name || '-'})` : '';
+          currentUserMsg.textContent = isLoggedIn ? `เข้าสู่ระบบแล้ว: ${user.username} (${agencyName})` : '';
         }
         if (logoutBtn) logoutBtn.hidden = !isLoggedIn;
         if (loginMsg && isLoggedIn) loginMsg.textContent = '';
@@ -4233,30 +4376,106 @@
         return true;
       }
 
-      function loadJsonp(url, params, callback, onError) {
+      function loadJsonp(url, params, callback, onError, options) {
+        const retryCount = options && options.retryCount ? options.retryCount : 0;
         const callbackName = 'bdeInputLoginCallback_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
         const query = new URLSearchParams(params || {});
         query.set('callback', callbackName);
+        query.set('_', Date.now() + '_' + Math.floor(Math.random() * 100000)); // cache-buster สำหรับ browser เดิม
 
         const script = document.createElement('script');
+        script.async = true;
+
+        let finished = false;
+        const timeoutId = setTimeout(function () {
+          if (finished) return;
+          finished = true;
+          cleanup();
+
+          // retry อัตโนมัติ 1 ครั้ง โดยไม่ต้องให้ผู้ใช้ clear cache/browser
+          if (retryCount < 1) {
+            loadJsonp(url, params, callback, onError, { retryCount: retryCount + 1 });
+          } else if (onError) {
+            onError();
+          }
+        }, 15000);
+
         const cleanup = function () {
-          delete window[callbackName];
+          clearTimeout(timeoutId);
+          try { delete window[callbackName]; } catch (error) {}
           if (script.parentNode) script.parentNode.removeChild(script);
         };
 
         window[callbackName] = function (data) {
+          if (finished) return;
+          finished = true;
           try { callback(data); }
           finally { cleanup(); }
         };
 
         script.onerror = function () {
+          if (finished) return;
+          finished = true;
           cleanup();
-          if (onError) onError();
+
+          // retry อัตโนมัติ 1 ครั้ง โดยไม่ต้องให้ผู้ใช้ clear cache/browser
+          if (retryCount < 1) {
+            loadJsonp(url, params, callback, onError, { retryCount: retryCount + 1 });
+          } else if (onError) {
+            onError();
+          }
         };
 
         const separator = url.includes('?') ? '&' : '?';
         script.src = url + separator + query.toString();
         document.body.appendChild(script);
+      }
+
+      function loadIframeLogin(url, params, callback, onError) {
+        const requestId = 'bdeLoginFrame_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
+        const query = new URLSearchParams(params || {});
+        query.set('action', 'loginFrame');
+        query.set('requestId', requestId);
+        query.set('_', Date.now() + '_' + Math.floor(Math.random() * 100000));
+
+        let finished = false;
+        const timeoutId = setTimeout(function () {
+          if (finished) return;
+          finished = true;
+          window.removeEventListener('message', handleMessage);
+          if (loginBridgeFrame) loginBridgeFrame.src = 'about:blank';
+          if (onError) onError();
+        }, 15000);
+
+        function cleanup() {
+          clearTimeout(timeoutId);
+          window.removeEventListener('message', handleMessage);
+          setTimeout(function () {
+            if (loginBridgeFrame) loginBridgeFrame.src = 'about:blank';
+          }, 200);
+        }
+
+        function handleMessage(event) {
+          const data = event.data || {};
+          if (!data || data.type !== 'BDE_LOGIN_FRAME_RESULT' || data.requestId !== requestId) return;
+
+          if (finished) return;
+          finished = true;
+
+          cleanup();
+          callback(data.payload || {});
+        }
+
+        window.addEventListener('message', handleMessage);
+
+        const separator = url.includes('?') ? '&' : '?';
+        if (loginBridgeFrame) {
+          loginBridgeFrame.hidden = true;
+          loginBridgeFrame.src = url + separator + query.toString();
+        } else if (onError) {
+          cleanup();
+          onError();
+        }
       }
 
       function openInputForm(event) {
@@ -4276,6 +4495,8 @@
           if (loginMsg) loginMsg.textContent = 'กรุณากรอก Username และ Password';
           return;
         }
+
+        resetInputLoginRuntime();
 
         if (loginBtn) loginBtn.disabled = true;
         if (loginMsg) loginMsg.textContent = 'กำลังตรวจสอบข้อมูลเข้าสู่ระบบ...';
@@ -4298,18 +4519,34 @@
             if (loginMsg) loginMsg.textContent = (data && data.message) ? data.message : 'Username หรือ Password ไม่ถูกต้อง';
           }
         }, function () {
-          if (loginBtn) loginBtn.disabled = false;
-          if (loginMsg) loginMsg.textContent = 'ไม่สามารถเชื่อมต่อระบบ Login ได้ กรุณาลองใหม่';
+          if (loginMsg) loginMsg.textContent = 'กำลังเชื่อมต่ออีกช่องทาง...';
+
+          loadIframeLogin(GOOGLE_SCRIPT_URL, {
+            username,
+            password
+          }, function (data) {
+            if (loginBtn) loginBtn.disabled = false;
+
+            if (data && data.success && data.user) {
+              const user = data.user;
+              writeCurrentUser(user);
+              if (passwordInput) passwordInput.value = '';
+              setLoginState(user);
+              ensureFormLoaded();
+            } else {
+              writeCurrentUser(null);
+              setLoginState(null);
+              if (loginMsg) loginMsg.textContent = (data && data.message) ? data.message : 'Username หรือ Password ไม่ถูกต้อง';
+            }
+          }, function () {
+            if (loginBtn) loginBtn.disabled = false;
+            if (loginMsg) loginMsg.textContent = 'ไม่สามารถเชื่อมต่อระบบ Login ได้ กรุณาเปิดผ่าน Chrome หรือแจ้งผู้ดูแลระบบ';
+          });
         });
       }
 
       function logoutInputUser() {
-        writeCurrentUser(null);
-        if (iframe) {
-          iframe.srcdoc = '';
-          iframe.removeAttribute('data-loaded');
-        }
-        if (frameCard) frameCard.hidden = true;
+        resetInputLoginRuntime();
         if (usernameInput) usernameInput.value = '';
         if (passwordInput) passwordInput.value = '';
         if (loginMsg) loginMsg.textContent = '';
@@ -4319,6 +4556,7 @@
       if (openBtn) openBtn.addEventListener('click', openInputForm);
       if (loginBtn) loginBtn.addEventListener('click', loginInputUser);
       if (logoutBtn) logoutBtn.addEventListener('click', logoutInputUser);
+      if (inputTopbarLogoutBtn) inputTopbarLogoutBtn.addEventListener('click', logoutInputUser);
       if (passwordInput) {
         passwordInput.addEventListener('keydown', function (event) {
           if (event.key === 'Enter') loginInputUser();
